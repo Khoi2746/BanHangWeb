@@ -1,91 +1,114 @@
 package com.example.asm1.controller;
 
 import com.example.asm1.Entity.RegisterForm;
+import com.example.asm1.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class AuthController {
 
+    @Autowired
+    private UserRepository userRepository;
+
     // 1. GET: Hiển thị trang đăng ký
     @GetMapping("/register")
     public String showRegisterForm(Model model, HttpSession session) {
-
-        // --- LẤY EMAIL TỪ SESSION ---
         String receivedEmail = (String) session.getAttribute("userEmail");
 
-        // [CHỐT CHẶN] Nếu chưa có email -> ĐÁ VỀ
+        // Chặn nếu người dùng chưa qua bước nhập email
         if (receivedEmail == null || receivedEmail.isEmpty()) {
-
-            // --- CÁCH MỚI: LƯU LỖI VÀO SESSION (Chắc chắn nhận được) ---
-            session.setAttribute("sessionError", "Please enter your email first!");
-
-            System.out.println("Không có email -> Đá về /checkMail");
+            session.setAttribute("sessionError", "Vui lòng nhập email trước khi đăng ký!");
             return "redirect:/checkMail";
         }
 
-        // Nếu có email -> Điền vào form
         RegisterForm form = new RegisterForm();
         form.setEmail(receivedEmail);
-
         model.addAttribute("registerForm", form);
         return "register";
     }
 
-    // NEWLINE
-    // 2. POST: Xử lý đăng ký
-    // 2. POST: Xử lý đăng ký (Có kiểm tra mã OTP)
+    // 2. POST: Xử lý đăng ký (Lưu vào SQL Server và Redirect sang Login)
     @PostMapping("/register")
     public String processRegister(@Valid @ModelAttribute("registerForm") RegisterForm registerForm,
-            BindingResult bindingResult,
-            HttpSession session,
-            Model model) {
+                                  BindingResult bindingResult,
+                                  HttpSession session,
+                                  Model model) {
 
-        // 1. Kiểm tra lỗi Validation từ Form (Trống, định dạng email, password...)
+        // --- BƯỚC 1: KIỂM TRA LỖI VALIDATION ---
         if (bindingResult.hasErrors()) {
             return "register";
         }
 
-        // 2. Lấy mã OTP từ session và từ người dùng nhập
+        // --- BƯỚC 2: KIỂM TRA MÃ OTP ---
         String correctOtp = (String) session.getAttribute("otpCode");
         String userEnteredCode = registerForm.getCode();
 
-        // 3. LOGIC KIỂM TRA (Thay thế cho cái everythingIsOk bị lỗi)
-        if (correctOtp == null) {
-            bindingResult.rejectValue("code", "error.registerForm", "Mã đã hết hạn, vui lòng gửi lại mã!");
+        if (correctOtp == null || !correctOtp.equals(userEnteredCode)) {
+            bindingResult.rejectValue("code", "error.registerForm", "Mã xác nhận không đúng hoặc đã hết hạn!");
             return "register";
         }
 
-        if (!correctOtp.equals(userEnteredCode)) {
-            bindingResult.rejectValue("code", "error.registerForm", "Mã xác nhận không đúng!");
+        // --- BƯỚC 3: LƯU DATABASE ---
+        try {
+            // Lưu người dùng vào SQL Server vĩnh viễn
+            userRepository.save(registerForm); 
+            
+            // Xóa dữ liệu tạm trong session cho sạch sẽ
+            session.removeAttribute("otpCode");
+            session.removeAttribute("userEmail");
+
+            System.out.println("LOG: Đăng ký thành công cho Member: " + registerForm.getEmail());
+            
+            // Tự động chuyển sang trang Login sau khi thành công
+            return "redirect:/login"; 
+
+        } catch (Exception e) {
+            model.addAttribute("error", "Lỗi: Email này đã tồn tại trong hệ thống!");
             return "register";
         }
-
-        // --- ĐẾN ĐÂY LÀ "EVERYTHING IS OK" RỒI ĐẤY ---
-
-        // 4. Lưu thông tin người dùng vào Session để Header hiển thị tên
-        session.setAttribute("loggedInUser", registerForm);
-
-        // 5. Xóa mã OTP sau khi dùng xong
-        session.removeAttribute("otpCode");
-
-        System.out.println("Đăng ký thành công cho Member: " + registerForm.getFirstName());
-        return "redirect:/home";
     }
 
+    // 3. GET: Hiển thị trang Login
+    @GetMapping("/login")
+    public String showLoginPage() {
+        return "login";
+    }
+
+    // 4. POST: Xử lý Đăng nhập (Kiểm tra từ Database)
+    @PostMapping("/login")
+    public String processLogin(@RequestParam("email") String email,
+                               @RequestParam("password") String password,
+                               HttpSession session,
+                               Model model) {
+
+        // Tìm kiếm người dùng trong Database theo Email
+        RegisterForm userInDb = userRepository.findByEmail(email);
+
+        // So khớp mật khẩu
+        if (userInDb != null && userInDb.getPassword().equals(password)) {
+            // Lưu thông tin vào session để Header hiển thị tên "Hi, "
+            session.setAttribute("loggedInUser", userInDb);
+            System.out.println("LOG: Đăng nhập thành công: " + email);
+            return "redirect:/home";
+        } else {
+            model.addAttribute("error", "Email hoặc mật khẩu không chính xác!");
+            return "login";
+        }
+    }
+
+    // 5. GET: Đăng xuất
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        // 1. Xóa toàn bộ dữ liệu trong session để người dùng thoát ra hoàn toàn
-        session.invalidate();
-
-        // 2. Sau khi thoát, đá người dùng về trang chủ (lúc này Header sẽ tự hiện lại
-        // nút Sign In)
+        session.invalidate(); // Xóa toàn bộ session
         return "redirect:/home";
     }
 }
