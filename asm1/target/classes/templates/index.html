@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Nike. Just Do It. Nike VN</title>
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/image/icon.png}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 1. Thiết lập cơ bản */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #fff;
+        }
+
+        a {
+            text-decoration: none;
+            color: #111;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .inner-content {
+            max-width: 1920px;
+            /* Giới hạn chiều rộng nội dung */
+            margin: 0 auto;
+            /* Căn giữa */
+            padding: 0 48px;
+            /* Khoảng cách lề trái phải */
+            position: relative;
+            /* Để làm mốc cho menu giữa */
+            height: 100%;
+            /* Chiều cao ăn theo thằng cha */
+
+            /* Flexbox để dàn trang nội dung bên trong */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 2. Top Bar (Màu xám) */
+        .top-bar-wrapper {
+            background-color: #f5f5f5;
+            /* Màu nền tràn viền */
+            width: 100%;
+            height: 36px;
+        }
+
+        .top-bar-content {
+            font-size: 12px;
+            font-weight: 500;
+            /* Thừa hưởng flex từ .inner-content */
+        }
+
+        .top-right-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .top-right-links a:hover {
+            color: #757575;
+        }
+
+        .jordan-logo img {
+            width: 24px;
+            /* Chỉnh lại chút cho gọn */
+            height: auto;
+            display: block;
+        }
+
+        /* 3. Main Navigation (Màu trắng) */
+        .main-nav-wrapper {
+            background-color: white;
+            /* Màu nền tràn viền */
+            width: 100%;
+            height: 60px;
+            z-index: 10;
+            position: relative;
+        }
+
+        .nike-logo img {
+            width: 60px;
+            height: auto;
+            display: block;
+        }
+
+        /* Menu Giữa - Căn giữa tuyệt đối */
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+
+        .nav-links a {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .nav-links a:hover {
+            border-bottom: 2px solid black;
+            padding-bottom: 2px;
+        }
+
+        /* Khu vực bên phải */
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Search */
+        .search-container {
+            position: relative;
+            width: 180px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 8px 10px 8px 40px;
+            border-radius: 20px;
+            border: none;
+            background-color: #f5f5f5;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-container input:hover {
+            background-color: #e5e5e5;
+        }
+
+        .search-icon-btn {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #111;
+            font-size: 20px;
+        }
+
+        .action-icon {
+            font-size: 22px;
+            color: #111;
+        }
+
+        /* 4. Promo Bar (Màu xám dưới cùng) */
+        .promo-bar-wrapper {
+            background-color: #f5f5f5;
+            border-top: 1px solid #e5e5e5;
+            border-bottom: 1px solid #e5e5e5;
+            width: 100%;
+            padding: 10px 0;
+        }
+
+        /* Promo content cần ghi đè flex mặc định để canh giữa text dọc */
+        .promo-content {
+            display: block;
+            text-align: center;
+        }
+
+        .promo-text {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .promo-subtext {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .promo-subtext a {
+            text-decoration: underline;
+            margin: 0 5px;
+        }
+
+        /* --- SEARCH OVERLAY STYLES --- */
+
+        .search-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            /* Phủ kín màn hình */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Nền tối mờ phía dưới */
+            z-index: 9999;
+            /* Đè lên tất cả mọi thứ */
+
+            /* Mặc định ẩn bằng cách trượt lên trên hoặc ẩn opacity */
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Khi có class active thì hiện ra */
+        .search-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .search-overlay-content {
+            background-color: white;
+            width: 100%;
+            padding: 20px 48px 40px 48px;
+            /* Căn chỉnh lề */
+            transform: translateY(-100%);
+            /* Mặc định trượt lên trên khuất mắt */
+            transition: transform 0.3s ease;
+        }
+
+        .search-overlay.active .search-overlay-content {
+            transform: translateY(0);
+            /* Trượt xuống vị trí cũ */
+        }
+
+        /* Layout phần trên cùng */
+        .search-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1920px;
+            margin: 0 auto;
+            height: 60px;
+        }
+
+        .overlay-logo img {
+            width: 60px;
+        }
+
+        /* Ô input to */
+        .big-search-container {
+            flex: 1;
+            /* Chiếm hết khoảng trống ở giữa */
+            margin: 0 40px;
+            position: relative;
+            max-width: 600px;
+            /* Giới hạn độ rộng ô search cho đẹp */
+        }
+
+        .big-search-container input {
+            width: 100%;
+            padding: 12px 20px 12px 50px;
+            /* Chừa chỗ cho icon */
+            font-size: 20px;
+            /* Chữ to hơn */
+            background-color: #f5f5f5;
+            border: none;
+            border-radius: 24px;
+            outline: none;
+            font-weight: 500;
+        }
+
+        .big-search-container input:hover {
+            background-color: #e5e5e5;
+        }
+
+        .search-icon-big {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: #111;
+        }
+
+        /* Nút Cancel */
+        .btn-cancel {
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #111;
+        }
+
+        .btn-cancel:hover {
+            color: #757575;
+        }
+
+        /* Phần Popular Terms */
+        .search-suggestions {
+            max-width: 1000px;
+            /* Căn cho thẳng hàng với logo hoặc input */
+            margin: 30px auto 0 auto;
+            /* Đẩy xuống dưới một chút */
+            padding-left: 100px;
+            /* Căn chỉnh cho khớp mắt nhìn (tùy chỉnh số này) */
+        }
+
+        .suggestion-title {
+            font-size: 14px;
+            color: #757575;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .search-tag {
+            background-color: #f5f5f5;
+            color: #111;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .search-tag:hover {
+            background-color: #d5d5d5;
+        }
+
+        /* Backdrop để bấm ra ngoài thì đóng */
+        .overlay-backdrop {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="top-bar-wrapper">
+            <div class="inner-content top-bar-content">
+                <div class="jordan-logo">
+                    <img src="image/jordanIcon.png" alt="Jordan">
+                </div>
+                <div class="top-right-links">
+                    <a href="#">Find a Store</a>
+                    <span>|</span>
+                    <a href="#">Help</a>
+                    <span>|</span>
+                    <a href="#">Join Us</a>
+                    <span>|</span>
+                    <a href="http://localhost:8080/login">Sign In</a>
+                </div>
+            </div>
+        </div>
+
+        <nav class="main-nav-wrapper">
+            <div class="inner-content">
+                <a href="http://localhost:8080/home" class="nike-logo">
+                    <img src="image/icon.png" alt="Nike">
+                </a>
+
+                <div class="nav-links">
+                    <a href="#">New & Featured</a>
+                    <a href="#">Men</a>
+                    <a href="#">Women</a>
+                    <a href="#">Kids</a>
+                    <a href="#">Sale</a>
+                </div>
+
+                <div class="nav-actions">
+                    <div class="search-container">
+                        <i class="fa-solid fa-magnifying-glass search-icon-btn"></i>
+                        <input type="text" placeholder="Search">
+                    </div>
+                    <a href="#" class="action-icon"><i class="fa-regular fa-heart"></i></a>
+                    <a href="#" class="action-icon"><i class="fa-solid fa-bag-shopping"></i></a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="promo-bar-wrapper">
+            <div class="inner-content promo-content">
+                <div class="promo-text">Free Standard Delivery & 30-Day Free Returns</div>
+                <div class="promo-subtext">
+                    <a href="#">Join Now</a>
+                    <a href="#">View Details</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Search Overlay -->
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-overlay-content">
+            <div class="search-top-bar">
+                <a href="#" class="overlay-logo">
+                    <img src="image/icon.png" alt="Nike">
+                </a>
+
+                <div class="big-search-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon-big"></i>
+                    <input type="text" placeholder="Search" id="bigSearchInput">
+                </div>
+
+                <button class="btn-cancel" onclick="closeSearch()">Cancel</button>
+            </div>
+
+            <div class="search-suggestions">
+                <p class="suggestion-title">Popular Search Terms</p>
+                <div class="tags-container">
+                    <a href="#" class="search-tag">luka 5</a>
+                    <a href="#" class="search-tag">lunar new year fits</a>
+                    <a href="#" class="search-tag">air force 1</a>
+                    <a href="#" class="search-tag">jordan</a>
+                    <a href="#" class="search-tag">jordan 1 low</a>
+                    <a href="#" class="search-tag">air max</a>
+                    <a href="#" class="search-tag">basketball shoes</a>
+                    <a href="#" class="search-tag">nike tech</a>
+                </div>
+            </div>
+        </div>
+        <div class="overlay-backdrop" onclick="closeSearch()"></div>
+    </div>
+
+    <script>
+        // Hàm mở Search
+        function openSearch() {
+            document.getElementById("searchOverlay").classList.add("active");
+            // Tự động focus vào ô nhập liệu cho tiện
+            document.getElementById("bigSearchInput").focus();
+        }
+
+        // Hàm đóng Search
+        function closeSearch() {
+            document.getElementById("searchOverlay").classList.remove("active");
+        }
+
+        // Gắn sự kiện click vào ô search nhỏ ở menu chính
+        // Em cần tìm cái thẻ input cũ của em và thêm sự kiện onclick="openSearch()"
+        // Hoặc dùng code JS này để tự gắn:
+        document.addEventListener("DOMContentLoaded", function () {
+            const smallSearchInput = document.querySelector(".search-container input");
+            if (smallSearchInput) {
+                smallSearchInput.addEventListener("click", openSearch);
+            }
+        });
+    </script>
+</body>
+
+</html>
