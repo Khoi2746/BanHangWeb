@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-    <title>Nike. Just Do It. Nike VN</title>
-    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/image/icon.png}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/image/css/index.css}">
+    <link rel="stylesheet" href="/image/css/Favorite.css">
+    <title>Nike - Favorites</title>
+    
 </head>
-
 <body>
-
     <header>
         <div class="top-bar-wrapper">
             <div class="inner-content top-bar-content">
@@ -277,8 +276,7 @@
             </div>
         </div>
     </header>
-
-    <div class="search-overlay" id="searchOverlay">
+     <div class="search-overlay" id="searchOverlay">
         <div class="search-overlay-content">
             <div class="search-top-bar">
                 <a href="#" class="overlay-logo">
@@ -307,10 +305,14 @@
         </div>
         <div class="overlay-backdrop" onclick="closeSearch()"></div>
     </div>
+    <main class="favourites-container">
+    <h1 class="favourites-header-title">Favourites</h1>
 
+    <div class="empty-state-wrapper">
+        <p class="empty-state-message">Items added to your Favourites will be saved here.</p>
+    </div>
+</main>
 
-    <!-- link script vào -->
-    <script src="/image/js/index.js"></script>
+<script src="/image/js/Favorite.js"></script>
 </body>
-
 </html>
