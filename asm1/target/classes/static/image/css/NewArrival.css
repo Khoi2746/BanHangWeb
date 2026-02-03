@@ -770,3 +770,262 @@ img {
 .product-name { font-size: 1rem; font-weight: 500; margin-bottom: 4px; }
 .product-cat { color: #707072; font-size: 0.9rem; margin-bottom: 8px; }
 .product-price { font-weight: 500; font-size: 1rem; }
+
+/* --- 1. GLOBAL RESET --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+    color: #111;
+    background-color: #fff;
+}
+
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+
+/* --- 2. PAGE HEADER (Tiêu đề & Nút Hide Filter) --- */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 250px; /* Căn lề giống container */
+    position: sticky;
+    top: 0; /* Dính lên trên cùng khi cuộn */
+    background: white;
+    z-index: 100;
+    transition: transform 0.3s;
+}
+
+.page-header h1 {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.header-actions {
+    display: flex;
+    gap: 25px;
+}
+
+.clickable {
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Khoảng cách giữa chữ và icon */
+}
+
+.clickable:hover {
+    color: #757575;
+}
+
+/* --- 3. MAIN LAYOUT (Container) --- */
+.container {
+    display: flex;
+    padding: 0 255px; /* Lề 2 bên */
+    margin-bottom: 60px;
+    align-items: flex-start; /* Quan trọng để sidebar sticky hoạt động */
+}
+
+/* --- 4. SIDEBAR (Bộ lọc bên trái) --- */
+.sidebar {
+    width: 260px; /* Chiều rộng cố định */
+    padding-right: 40px;
+    /* Sticky: Giữ thanh này đứng yên khi cuộn sản phẩm */
+    position: sticky;
+    top: 80px; 
+    height: calc(100vh - 80px);
+    overflow-y: auto; /* Cho phép cuộn riêng sidebar nếu quá dài */
+    
+    /* Animation: Hiệu ứng trượt khi ẩn */
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+}
+
+/* Class này được JS thêm vào để ẩn sidebar */
+.sidebar.hidden {
+    width: 0;
+    padding-right: 0;
+    opacity: 0;
+    overflow: hidden;
+}
+
+/* Danh mục list trên cùng */
+.category-list {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 20px;
+}
+
+.category-list li {
+    padding: 6px 0;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.category-list li:hover { color: #757575; }
+
+/* --- 5. FILTER ACCORDION (Mở lên mở xuống) --- */
+.filter-group {
+    border-top: 1px solid #e5e5e5;
+    padding: 12px 0;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 5px 0;
+}
+
+.filter-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+    overflow: hidden;
+    
+    /* Animation chiều cao */
+    max-height: 500px; /* Đủ lớn để chứa nội dung */
+    opacity: 1;
+    transition: all 0.4s ease;
+}
+
+.filter-content label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.filter-content input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #111; /* Màu đen cho checkbox */
+    cursor: pointer;
+}
+
+/* Class ẩn nội dung filter */
+.filter-content.collapsed {
+    max-height: 0;
+    margin-top: 0;
+    opacity: 0;
+}
+
+/* Xoay mũi tên */
+.arrow i {
+    transition: transform 0.3s;
+}
+.arrow.rotated i {
+    transform: rotate(180deg);
+}
+
+/* --- 6. PRODUCT GRID (Lưới sản phẩm) --- */
+.product-grid {
+    flex: 1; /* Chiếm hết khoảng trống còn lại */
+    display: grid;
+    /* Chia 3 cột đều nhau */
+    padding: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    transition: width 0.4s ease; /* Mượt mà khi sidebar ẩn */
+}
+
+/* --- 7. PROMO CARD (Ảnh to đầu tiên) --- */
+.promo-card {
+    grid-column: span 1; /* Chiếm 1 ô */
+    position: relative;
+    background-color: #f5f5f5;
+    /* Đảm bảo chiều cao bằng với các thẻ khác */
+    aspect-ratio: 2/3; /* Hoặc chỉnh height: 100% nếu muốn */
+    overflow: hidden;
+}
+
+.promo-card img {
+    width: 150%;
+    height: 150%;
+    object-fit: cover;
+}
+
+.promo-text-overlay {
+    position: absolute;
+    bottom: 30px;
+    left: 24px;
+    color: white; /* Chữ trắng trên nền ảnh tối */
+    z-index: 2;
+}
+
+.promo-text-overlay h2 {
+    font-size: 20px;
+    margin-bottom: 16px;
+    font-weight: 500;
+}
+
+.btn-shop-promo {
+    background: white;
+    color: #111;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+.btn-shop-promo:hover { background: #e5e5e5; }
+
+/* --- 8. PRODUCT CARD (Thẻ sản phẩm) --- */
+.product-card {
+    cursor: pointer;
+}
+
+.product-img-box {
+    background-color: #f5f5f5; /* Nền xám nhạt đặc trưng Nike */
+    width: 104%;
+    aspect-ratio: 1 / 1; /* Luôn vuông */
+    margin-bottom: 12px;
+    position: relative;
+}
+
+.product-img-box img {
+    width: 100%;
+    height: 130%;
+    object-fit: cover;
+    mix-blend-mode: multiply; /* Giúp ảnh giày hòa vào nền xám */
+}
+
+/* Thông tin sản phẩm */
+.product-info {
+    padding: 0 4px;
+}
+
+.tag-just-in {
+    color: #9E3500; /* Màu cam đất Nike */
+    font-weight: 500;
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.product-name {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    line-height: 1.5;
+}
+
+.product-category {
+    color: #757575; /* Màu xám chữ */
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.product-price {
+    font-weight: 500;
+    font-size: 16px;
+    margin-top: 4px;
+}

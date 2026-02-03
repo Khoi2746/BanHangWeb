@@ -79,3 +79,4 @@ playPauseBtn.addEventListener('click', () => {
 window.onload = () => {
     showSlide(0);
 };
+

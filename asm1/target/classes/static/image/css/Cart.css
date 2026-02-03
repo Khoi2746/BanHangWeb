@@ -770,3 +770,82 @@ img {
 .product-name { font-size: 1rem; font-weight: 500; margin-bottom: 4px; }
 .product-cat { color: #707072; font-size: 0.9rem; margin-bottom: 8px; }
 .product-price { font-weight: 500; font-size: 1rem; }
+
+
+
+
+
+
+
+
+
+/* --- COPY CSS HEADER VÀO ĐÂY HOẶC LINK FILE NGOÀI --- */
+        /* (Để gọn code, anh chỉ viết CSS phần Cart ở dưới nhé) */
+        
+        body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: #111; margin: 0; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+        
+        /* Layout 2 cột */
+        .cart-wrapper { display: flex; gap: 40px; align-items: flex-start; }
+        .cart-left { flex: 2; /* Chiếm 66% */ }
+        .cart-right { flex: 1; /* Chiếm 33% */ }
+
+        h2 { font-size: 22px; font-weight: 500; margin-bottom: 20px; }
+
+        /* --- EMPTY STATE (Khi giỏ rỗng) --- */
+        .empty-msg { font-size: 16px; margin-bottom: 30px; }
+
+        /* --- CART ITEMS LIST --- */
+        .cart-item { display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid #e5e5e5; }
+        .item-img { width: 150px; height: 150px; background: #f5f5f5; }
+        .item-img img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; }
+        
+        .item-details { flex: 1; }
+        .item-name { font-weight: 500; margin-bottom: 5px; }
+        .item-cat { color: #757575; font-size: 14px; margin-bottom: 5px; }
+        .item-actions { margin-top: 20px; display: flex; gap: 20px; color: #757575; font-size: 14px; cursor: pointer; }
+        .item-actions span:hover { color: #111; text-decoration: underline; }
+
+        /* --- SUMMARY BOX (Bên phải) --- */
+        .summary-box { padding: 20px 0; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 15px; }
+        .summary-row.total { border-top: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5; padding: 20px 0; margin-top: 20px; font-weight: 500; }
+        
+        .btn-checkout {
+            width: 100%;
+            background: #111;
+            color: #fff;
+            border: none;
+            padding: 18px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn-checkout:hover { background: #333; }
+        
+        /* Disable nút khi giỏ rỗng */
+        .btn-checkout:disabled { background: #f5f5f5; color: #ccc; cursor: not-allowed; }
+
+        /* --- CAROUSEL: YOU MIGHT ALSO LIKE --- */
+        .recommend-section { margin-top: 60px; }
+        .scroll-container {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            /* Ẩn thanh cuộn */
+            scrollbar-width: none; 
+        }
+        .scroll-container::-webkit-scrollbar { display: none; }
+        
+        .rec-card { min-width: 300px; cursor: pointer; }
+        .rec-img { width: 100%; aspect-ratio: 1/1; background: #f5f5f5; margin-bottom: 10px; }
+        .rec-img img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Responsive Mobile */
+        @media (max-width: 768px) {
+            .cart-wrapper { flex-direction: column; }
+            .cart-left, .cart-right { width: 100%; }
+        }

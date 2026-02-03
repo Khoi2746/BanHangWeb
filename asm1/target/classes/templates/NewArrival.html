@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-    <title>Nike. Just Do It. Nike VN</title>
-    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/image/icon.png}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/image/css/index.css}">
+    <link rel="stylesheet" th:href="@{/image/css/NewArrival.css}">
+    <title>New Arrivals</title>
 </head>
-
 <body>
-
-    <header>
+     <header>
         <div class="top-bar-wrapper">
             <div class="inner-content top-bar-content">
                 <div class="jordan-logo">
@@ -54,7 +52,7 @@
                                 <div class="dropdown-column">
                                     <h3>Featured</h3>
                                     <ul>
-                                        <li><a href="http://localhost:8080/new-arrivals">New Arrivals</a></li>
+                                        <li><a href="#">New Arrivals</a></li>
                                         <li><a href="#">Bestsellers</a></li>
                                         <li><a href="#">Shop All Sale</a></li>
                                     </ul>
@@ -258,7 +256,7 @@
                         <input type="text" placeholder="Search">
                     </div>
                     <a href="http://localhost:8080/favorites" class="action-icon"><i class="fa-regular fa-heart"></i></a>
-                    <a href="http://localhost:8080/cart" class="action-icon"><i class="fa-solid fa-bag-shopping"></i></a>
+                    <a href="#" class="action-icon"><i class="fa-solid fa-bag-shopping"></i></a>
                 </div>
             </div>
         </nav>
@@ -273,82 +271,95 @@
             </div>
         </div>
     </header>
-                                            <!-- Slider -->
-   <section class="hero-slider">
-    <div class="slide active">
-        <video muted playsinline class="bg-video">
-            <source src="video/video1.mp4" type="video/mp4">
-        </video>
-        <div class="hero-content">
-            <h1 aria-setsize="30">Air Max New</h1>
-            <h1 aria-setsize="48">2026 Coming Soon</h1>
-            <br>
-            <div class="hero-actions">
-                <button class="btn-notify">Shop Now</button>
-            </div>
+
+    <div class="page-header">
+        <h1>New (<span th:text="${totalItems}">0</span>)</h1>
+        <div class="header-actions">
+            <span id="btnHideFilter" class="clickable">Hide Filters <i class="fa-solid fa-sliders"></i></span>
+            <span class="clickable">Sort By <i class="fa-solid fa-chevron-down"></i></span>
         </div>
     </div>
 
-    <div class="slide">
-        <video muted playsinline class="bg-video">
-            <source src="video/video2.mp4" type="video/mp4">
-        </video>
-        <div class="hero-content">
-            <div class="hero-actions">
-                <h1 aria-setsize="30">Air Jordan 1</h1>
-                <br>
-                <button class="btn-notify">Notify Me</button>
-            </div>
+    <div class="container">
+        <aside class="sidebar" id="mainSidebar">
+            <ul class="category-list">
+                <li>Shoes</li>
+                <li>Tops & T-Shirts</li>
+                <li>Hoodies & Sweatshirts</li>
+                <li>Jackets</li>
+                <li>Trousers & Tights</li>
+            </ul>
+
+            <div class="filter-section">
+    <div class="filter-group">
+        <div class="filter-header">Gender <span class="arrow rotated"><i class="fa-solid fa-chevron-up"></i></span></div>
+        <div class="filter-content collapsed">
+            <label><input type="checkbox"> Men</label>
+            <label><input type="checkbox"> Women</label>
+            <label><input type="checkbox"> Unisex</label>
         </div>
     </div>
 
-    <div class="slider-controls-bottom">
-        <div class="dots-container">
-            <span class="dot active" onclick="currentSlide(0)"></span>
-            <span class="dot" onclick="currentSlide(1)"></span>
-        </div>
-        <div class="playback-controls">
-            <button id="playPauseBtn"><i class="fa-solid fa-pause"></i></button>
-            <button id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
-            <button id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
+    <div class="filter-group">
+        <div class="filter-header">Kids <span class="arrow rotated"><i class="fa-solid fa-chevron-up"></i></span></div>
+        <div class="filter-content collapsed">
+            <label><input type="checkbox"> Boys</label>
+            <label><input type="checkbox"> Girls</label>
         </div>
     </div>
-</section>
-<!-- =================================================================== -->
- <!-- Features -->
-  <section class="featured-section inner-content">
-        <div class="featured-item">
-            <img src="image/Golf.png" alt="Nike Golf">
-            <div class="item-overlay">
-                <p class="category">Nike Golf</p>
-                <h3 class="item-title">Engineered to Win</h3>
-                <a href="#" class="btn-shop">Shop</a>
-            </div>
-        </div> <div class="featured-item">
-            <img src="image/Just do it.png" alt="Nike Tennis">
-            <div class="item-overlay">
-                <p class="category">Nike Tennis Surf Symphony Collection</p>
-                <h3 class="item-title">It's About to Get Loud</h3>
-                <a href="#" class="btn-shop">Shop</a>
-            </div>
-        </div> <div class="featured-item">
-            <img src="image/Shoes.png" alt="Nike Shox">
-            <div class="item-overlay">
-                <p class="category">Nike Shox</p>
-                <a href="#" class="btn-shop">Shop</a>
-            </div>
-        </div> <div class="featured-item">
-            <img src="image/UnderShoes.png" alt="ACG Ultrafly">
-            <div class="item-overlay">
-                <p class="category">ACG Ultrafly</p>
-                <h3 class="item-title">Fast Incoming</h3>
-                <a href="#" class="btn-shop">Explore</a>
-            </div>
-        </div> </div>
-</section>
 
+    <div class="filter-group">
+        <div class="filter-header">Shop By Price <span class="arrow rotated"><i class="fa-solid fa-chevron-up"></i></span></div>
+        <div class="filter-content collapsed">
+            <label><input type="checkbox"> Under 1,000,000₫</label>
+            <label><input type="checkbox"> 1,000,000₫ - 2,000,000₫</label>
+            <label><input type="checkbox"> Over 2,000,000₫</label>
+        </div>
+    </div>
+    <div class="filter-group">
+        <div class="filter-header">Colour <span class="arrow rotated"><i class="fa-solid fa-chevron-up"></i></span></div>
+        <div class="filter-content collapsed">
+            <label><input type="checkbox"> Black</label>
+            <label><input type="checkbox"> White</label>
+            <label><input type="checkbox"> Red</label>
+        </div>
+    </div>
+</div>
+        </aside>
 
-<!-- =================================================================== -->
+        <main class="product-grid" id="productGrid">
+            
+            <div class="promo-card">
+                <img src="/image/image.png" alt="Promo">
+                <div class="promo-text-overlay">
+                    <h2>Sneakers of the Week</h2>
+                    <a href="#" class="btn-shop-promo">Shop On App</a>
+                </div>
+            </div>
+
+            <div class="product-card" th:each="product : ${products}">
+                <div class="product-img-box">
+                    <img th:src="@{${product.imageUrl}}" alt="Product Image">
+                </div>
+                
+                <div class="product-info">
+                    <div class="tag-just-in" th:if="${product.isFeatured}">Just In</div>
+                    
+                    <h3 class="product-name" th:text="${product.name}">Nike Air Force 1</h3>
+                    
+                    <p class="product-category" th:text="${product.gender} + '\'s ' + ${product.category}">Women's Shoes</p>
+                    
+                    <p class="product-price" 
+                       th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')} + '₫'">
+                       3,519,000₫
+                    </p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- =================================================================== -->
     <!-- Search Overlay -->
     <div class="search-overlay" id="searchOverlay">
         <div class="search-overlay-content">
@@ -443,9 +454,6 @@
         </div>
     </div>
 </footer>
-
-    <!-- link script vào -->
-    <script src="/image/js/index.js"></script>
+    <script th:src="@{/image/js/NewArrival.js}"></script>
 </body>
-
 </html>

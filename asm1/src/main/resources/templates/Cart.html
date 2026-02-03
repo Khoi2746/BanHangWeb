@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-    <title>Nike. Just Do It. Nike VN</title>
-    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/image/icon.png}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/image/css/index.css}">
+    <link rel="stylesheet" th:href="@{/image/css/Cart.css}">
+    <title>Cart</title>
 </head>
-
 <body>
-
     <header>
         <div class="top-bar-wrapper">
             <div class="inner-content top-bar-content">
@@ -258,7 +256,7 @@
                         <input type="text" placeholder="Search">
                     </div>
                     <a href="http://localhost:8080/favorites" class="action-icon"><i class="fa-regular fa-heart"></i></a>
-                    <a href="http://localhost:8080/cart" class="action-icon"><i class="fa-solid fa-bag-shopping"></i></a>
+                    <a href="#" class="action-icon"><i class="fa-solid fa-bag-shopping"></i></a>
                 </div>
             </div>
         </nav>
@@ -273,82 +271,7 @@
             </div>
         </div>
     </header>
-                                            <!-- Slider -->
-   <section class="hero-slider">
-    <div class="slide active">
-        <video muted playsinline class="bg-video">
-            <source src="video/video1.mp4" type="video/mp4">
-        </video>
-        <div class="hero-content">
-            <h1 aria-setsize="30">Air Max New</h1>
-            <h1 aria-setsize="48">2026 Coming Soon</h1>
-            <br>
-            <div class="hero-actions">
-                <button class="btn-notify">Shop Now</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="slide">
-        <video muted playsinline class="bg-video">
-            <source src="video/video2.mp4" type="video/mp4">
-        </video>
-        <div class="hero-content">
-            <div class="hero-actions">
-                <h1 aria-setsize="30">Air Jordan 1</h1>
-                <br>
-                <button class="btn-notify">Notify Me</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="slider-controls-bottom">
-        <div class="dots-container">
-            <span class="dot active" onclick="currentSlide(0)"></span>
-            <span class="dot" onclick="currentSlide(1)"></span>
-        </div>
-        <div class="playback-controls">
-            <button id="playPauseBtn"><i class="fa-solid fa-pause"></i></button>
-            <button id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
-            <button id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
-        </div>
-    </div>
-</section>
-<!-- =================================================================== -->
- <!-- Features -->
-  <section class="featured-section inner-content">
-        <div class="featured-item">
-            <img src="image/Golf.png" alt="Nike Golf">
-            <div class="item-overlay">
-                <p class="category">Nike Golf</p>
-                <h3 class="item-title">Engineered to Win</h3>
-                <a href="#" class="btn-shop">Shop</a>
-            </div>
-        </div> <div class="featured-item">
-            <img src="image/Just do it.png" alt="Nike Tennis">
-            <div class="item-overlay">
-                <p class="category">Nike Tennis Surf Symphony Collection</p>
-                <h3 class="item-title">It's About to Get Loud</h3>
-                <a href="#" class="btn-shop">Shop</a>
-            </div>
-        </div> <div class="featured-item">
-            <img src="image/Shoes.png" alt="Nike Shox">
-            <div class="item-overlay">
-                <p class="category">Nike Shox</p>
-                <a href="#" class="btn-shop">Shop</a>
-            </div>
-        </div> <div class="featured-item">
-            <img src="image/UnderShoes.png" alt="ACG Ultrafly">
-            <div class="item-overlay">
-                <p class="category">ACG Ultrafly</p>
-                <h3 class="item-title">Fast Incoming</h3>
-                <a href="#" class="btn-shop">Explore</a>
-            </div>
-        </div> </div>
-</section>
-
-
-<!-- =================================================================== -->
+    <!-- =================================================================== -->
     <!-- Search Overlay -->
     <div class="search-overlay" id="searchOverlay">
         <div class="search-overlay-content">
@@ -380,7 +303,100 @@
         <div class="overlay-backdrop" onclick="closeSearch()"></div>
     </div>
 
+    <!-- =================================================================== -->
+    <div class="container">
+        <div class="cart-wrapper">
+            
+            <div class="cart-left">
+                <h2>Bag</h2>
 
+                <div th:if="${#lists.isEmpty(cartItems)}">
+                    <p class="empty-msg">There are no items in your bag.</p>
+                </div>
+
+                <div th:each="item : ${cartItems}" class="cart-item">
+                    <div class="item-img">
+                        <img th:src="${item.imageUrl.startsWith('http') ? item.imageUrl : '/images/' + item.imageUrl}" alt="">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-name" th:text="${item.name}">Nike Air Force 1</div>
+                        <div class="item-cat" th:text="${item.category}">Men's Shoes</div>
+                        <div class="item-cat">Size 42</div> <div class="item-actions">
+                            <span><i class="fa-regular fa-heart"></i> Favourite</span>
+                            <span><i class="fa-regular fa-trash-can"></i> Remove</span>
+                        </div>
+                    </div>
+                    <div class="item-price" th:text="${#numbers.formatDecimal(item.price, 0, 'POINT', 0, 'COMMA')} + '₫'">
+                        3,519,000₫
+                    </div>
+                </div>
+
+                <div style="margin-top: 40px;">
+                    <h2>Favourites</h2>
+                    <p class="empty-msg">There are no items saved to your favourites.</p>
+                </div>
+            </div>
+
+            <div class="cart-right">
+                <h2>Summary</h2>
+                <div class="summary-box">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span th:text="${#numbers.formatDecimal(subtotal, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Estimated Delivery & Handling</span>
+                        <span>Free</span>
+                    </div>
+                    
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span th:text="${#numbers.formatDecimal(total, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
+                    </div>
+
+                    <button class="btn-checkout" th:disabled="${#lists.isEmpty(cartItems)}">Member Checkout</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="recommend-section">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2>You Might Also Like</h2>
+                <div>
+                    <i class="fa-solid fa-chevron-left" style="padding: 10px; background: #f5f5f5; border-radius: 50%; cursor: pointer;"></i>
+                    <i class="fa-solid fa-chevron-right" style="padding: 10px; background: #e5e5e5; border-radius: 50%; cursor: pointer;"></i>
+                </div>
+            </div>
+            
+            <div class="scroll-container">
+                <div class="rec-card">
+                    <div class="rec-img"><img src="https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/07548590-7d04-4648-944f-c38f4d54622b/air-jordan-1-mid-shoes-X5pM09.png" alt=""></div>
+                    <div class="item-name">Air Jordan 1 Mid</div>
+                    <div class="item-cat">Men's Shoes</div>
+                    <div class="item-price">3,200,000₫</div>
+                </div>
+                <div class="rec-card">
+                    <div class="rec-img"><img src="https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/e6da41fa-756f-4322-ac69-7988019a28c5/air-force-1-07-shoes-WrLlWX.png" alt=""></div>
+                    <div class="item-name">Nike Air Force 1 '07</div>
+                    <div class="item-cat">Men's Shoes</div>
+                    <div class="item-price">3,519,000₫</div>
+                </div>
+                <div class="rec-card">
+                    <div class="rec-img"><img src="https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/25697666-4148-4228-a379-3d1964263155/dunk-low-retro-shoe-66RGqF.png" alt=""></div>
+                    <div class="item-name">Nike Dunk Low Retro</div>
+                    <div class="item-cat">Men's Shoes</div>
+                    <div class="item-price">2,950,000₫</div>
+                </div>
+                 <div class="rec-card">
+                    <div class="rec-img"><img src="https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/f153b6e2-2a62-4467-9372-20c3773950c4/air-max-90-shoes-kRsBnD.png" alt=""></div>
+                    <div class="item-name">Nike Air Max 90</div>
+                    <div class="item-cat">Men's Shoes</div>
+                    <div class="item-price">3,800,000₫</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ======================================================================================================================================= -->
 
 
     <footer class="nike-footer">
@@ -443,9 +459,6 @@
         </div>
     </div>
 </footer>
-
-    <!-- link script vào -->
-    <script src="/image/js/index.js"></script>
+    <script th:src="@{/image/js/Cart.js}"></script>
 </body>
-
 </html>
