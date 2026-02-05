@@ -2,17 +2,31 @@ package com.example.asm1.repository;
 
 import com.example.asm1.Entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
-import java.util.Optional;
+
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Integer> {
-    // Lấy danh sách sản phẩm nổi bật để hiện ở trang chủ
+public interface ProductRepository extends JpaRepository<Product, Long> {
+
+    // Sản phẩm nổi bật
     List<Product> findByIsFeaturedTrue();
 
-    Optional<Product> findById(Long productId); 
-
-    List<Product> findByGenderAndCategory(String gender, String category);
-
+    // Tìm theo tên
     List<Product> findByNameContainingIgnoreCase(String keyword);
+
+    // Filter category + gender
+    @Query("""
+    SELECT p FROM Product p
+    WHERE (:category IS NULL OR p.category = :category)
+    AND (:gender IS NULL OR p.gender = :gender)
+""")
+List<Product> filterProducts(
+        @Param("category") String category,
+        @Param("gender") String gender
+);
+
+    
 }

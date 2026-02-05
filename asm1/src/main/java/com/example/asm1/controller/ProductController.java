@@ -3,6 +3,7 @@ package com.example.asm1.controller;
 import com.example.asm1.Entity.Product;
 import com.example.asm1.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,55 +17,110 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
-    // ✅ Trang danh sách sản phẩm (Mặc định)
-    @GetMapping("/new-arrivals")
-    public String showNewArrivalsPage(Model model) {
+    // =========================
+    // 1. Trang New Arrivals (mặc định)
+    // =========================
+    @GetMapping({"/", "/new-arrivals"})
+    public String showNewArrivals(Model model) {
 
-        List<Product> listProducts = productRepository.findAll();
+        List<Product> products = productRepository.findAll(
+                Sort.by("createdAt").descending()
+        );
 
-        model.addAttribute("products", listProducts);
-        model.addAttribute("totalItems", listProducts.size());
+        model.addAttribute("products", products);
+        model.addAttribute("totalItems", products.size());
 
-        return "NewArrival"; // Tên file HTML của ku em
+        return "NewArrival";
     }
 
-    // ✅ Trang chi tiết sản phẩm
+    // =========================
+    // 2. Trang chi tiết sản phẩm
+    // =========================
     @GetMapping("/product/detail/{id}")
-    public String showProductDetail(@PathVariable("id") Integer id, Model model) {
+    public String showProductDetail(
+            @PathVariable("id") Long id,
+            Model model
+    ) {
 
-        // 1. Tìm sản phẩm theo ID
         Product product = productRepository.findById(id).orElse(null);
 
-        // 2. Nếu không tìm thấy → quay về trang list
         if (product == null) {
             return "redirect:/new-arrivals";
         }
 
-        // 3. Gửi sản phẩm sang HTML
         model.addAttribute("product", product);
-
-        // 4. Trả về trang chi tiết
         return "ProductDetail";
     }
 
-    // 👇👇👇 PHẦN THÊM MỚI: CHỨC NĂNG TÌM KIẾM 👇👇👇
-
+    // =========================
+    // 3. Tìm kiếm sản phẩm theo tên
+    // =========================
     @GetMapping("/search")
-    public String searchProduct(@RequestParam("keyword") String keyword, Model model) {
-        
-        // 1. Gọi Repository để tìm sản phẩm có tên chứa từ khóa (không phân biệt hoa thường)
-        List<Product> searchResults = productRepository.findByNameContainingIgnoreCase(keyword);
+    public String searchProduct(
+            @RequestParam("keyword") String keyword,
+            Model model
+    ) {
 
-        // 2. Gửi danh sách kết quả sang HTML (Tái sử dụng biến "products")
-        model.addAttribute("products", searchResults);
-        
-        // 3. Gửi số lượng tìm thấy
-        model.addAttribute("totalItems", searchResults.size());
+        List<Product> products =
+                productRepository.findByNameContainingIgnoreCase(keyword);
 
-        // 4. Gửi lại từ khóa để hiển thị tiêu đề (VD: Kết quả cho "Nike")
+        model.addAttribute("products", products);
+        model.addAttribute("totalItems", products.size());
         model.addAttribute("searchKeyword", keyword);
 
-        // 5. Trả về trang NewArrival để hiển thị danh sách như bình thường
         return "NewArrival";
     }
+
+    // =========================
+    // 4. Filter + Sort sản phẩm
+    // =========================
+    @GetMapping("/products")
+    public String filterAndSortProducts(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String gender,
+            @RequestParam(required = false) String sort,
+            Model model
+    ) {
+
+        List<Product> products;
+
+        // 👉 FILTER (không sort)
+        if (sort == null || sort.isEmpty()) {
+            products = productRepository.filterProducts(category, gender);
+        }
+        // 👉 SORT
+        else {
+            switch (sort) {
+                case "price_asc":
+                    products = productRepository.findAll(
+                            Sort.by("price").ascending()
+                    );
+                    break;
+
+                case "price_desc":
+                    products = productRepository.findAll(
+                            Sort.by("price").descending()
+                    );
+                    break;
+
+                case "newest":
+                    products = productRepository.findAll(
+                            Sort.by("createdAt").descending()
+                    );
+                    break;
+
+                default:
+                    products = productRepository.findAll();
+            }
+        }
+
+        model.addAttribute("products", products);
+        model.addAttribute("totalItems", products.size());
+        model.addAttribute("category", category);
+        model.addAttribute("gender", gender);
+        model.addAttribute("sort", sort);
+
+        return "NewArrival";
+    }
+    
 }

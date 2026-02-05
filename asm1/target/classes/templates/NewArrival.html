@@ -130,47 +130,48 @@
     <div class="container">
         <aside class="sidebar" id="mainSidebar">
             <ul class="category-list">
-                <li>Shoes</li>
-                <li>Tops & T-Shirts</li>
-                <li>Hoodies & Sweatshirts</li>
-                <li>Jackets</li>
-                <li>Trousers & Tights</li>
+         <li><a th:href="@{/products(category='Shoes')}">Shoes</a></li>
+<li><a th:href="@{/products(category='Clothing')}">Clothing</a></li>
             </ul>
 
             <div class="filter-section">
     <div class="filter-group">
         <div class="filter-header">Gender <span class="arrow rotated"><i class="fa-solid fa-chevron-up"></i></span></div>
         <div class="filter-content collapsed">
-            <label><input type="checkbox"> Men</label>
-            <label><input type="checkbox"> Women</label>
-            <label><input type="checkbox"> Unisex</label>
+    <label>
+<form method="get" action="/products">
+    <label>
+        <input type="checkbox" name="gender" value="Men"> Men
+    </label>
+    <label>
+        <input type="checkbox" name="gender" value="Women"> Women
+    </label>
+    <label>
+        <input type="checkbox" name="gender" value="Kids"> Kids
+    </label>
+    <button type="submit">Apply</button>
+</form>
         </div>
     </div>
 
     <div class="filter-group">
-        <div class="filter-header">Kids <span class="arrow rotated"><i class="fa-solid fa-chevron-up"></i></span></div>
-        <div class="filter-content collapsed">
-            <label><input type="checkbox"> Boys</label>
-            <label><input type="checkbox"> Girls</label>
-        </div>
+       <form action="/products" method="get" id="filterForm">
+
+    <!-- KIDS -->
+    
+
+</form>
     </div>
 
     <div class="filter-group">
         <div class="filter-header">Shop By Price <span class="arrow rotated"><i class="fa-solid fa-chevron-up"></i></span></div>
         <div class="filter-content collapsed">
-            <label><input type="checkbox"> Under 1,000,000₫</label>
-            <label><input type="checkbox"> 1,000,000₫ - 2,000,000₫</label>
-            <label><input type="checkbox"> Over 2,000,000₫</label>
+  <a th:href="@{/products(sort='price_desc')}">Price: High-Low</a>
+<a th:href="@{/products(sort='price_asc')}">Price: Low-High</a>
+<a th:href="@{/products(sort='newest')}">Newest</a>
         </div>
     </div>
-    <div class="filter-group">
-        <div class="filter-header">Colour <span class="arrow rotated"><i class="fa-solid fa-chevron-up"></i></span></div>
-        <div class="filter-content collapsed">
-            <label><input type="checkbox"> Black</label>
-            <label><input type="checkbox"> White</label>
-            <label><input type="checkbox"> Red</label>
-        </div>
-    </div>
+    
 </div>
 
         </aside>
