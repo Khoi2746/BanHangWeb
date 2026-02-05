@@ -29,11 +29,19 @@
                     </th:block>
 
                     <th:block th:unless="${session.loggedInUser == null}">
-                        <span style="font-weight: 600;">
-                            Hi, <span th:text="${session.loggedInUser.firstName}">Member</span>
-                        </span>
-                        <span>|</span>
-                        <a th:href="@{/logout}" style="color: #d43f3a;">Log Out</a>
+                        <div class="user-dropdown">
+                            <div class="user-name-wrapper">
+                                Hi, <span th:text="${session.loggedInUser.firstName}">Member</span>
+                                <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                            </div>
+                            <div class="dropdown-content">
+                                <a th:href="@{/profile}">Profile Detail</a>
+                                <hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 0;">
+                                <a th:href="@{/change-password}">Change Password</a>
+                                <hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 0;">
+                                <a th:href="@{/logout}" style="color: #d43f3a !important;">Log Out</a>
+                            </div>
+                        </div>
                     </th:block>
                 </div>
             </div>
@@ -257,8 +265,10 @@
                         <i class="fa-solid fa-magnifying-glass search-icon-btn"></i>
                         <input type="text" placeholder="Search">
                     </div>
-                    <a href="http://localhost:8080/favorites" class="action-icon"><i class="fa-regular fa-heart"></i></a>
-                    <a href="http://localhost:8080/cart" class="action-icon"><i class="fa-solid fa-bag-shopping"></i></a>
+                    <a href="http://localhost:8080/favorites" class="action-icon"><i
+                            class="fa-regular fa-heart"></i></a>
+                    <a href="http://localhost:8080/cart" class="action-icon"><i
+                            class="fa-solid fa-bag-shopping"></i></a>
                 </div>
             </div>
         </nav>
@@ -273,51 +283,50 @@
             </div>
         </div>
     </header>
-    
-                                            <!-- Slider -->
-   <section class="hero-slider">
-    <div class="slide active">
-        <video muted playsinline class="bg-video">
-            <source src="video/video1.mp4" type="video/mp4">
-        </video>
-        <div class="hero-content">
-            <h1 aria-setsize="30">Air Max New</h1>
-            <h1 aria-setsize="48">2026 Coming Soon</h1>
-            <br>
-            <div class="hero-actions">
-                <button class="btn-notify">Shop Now</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="slide">
-        <video muted playsinline class="bg-video">
-            <source src="video/video2.mp4" type="video/mp4">
-        </video>
-        <div class="hero-content">
-            <div class="hero-actions">
-                <h1 aria-setsize="30">Air Jordan 1</h1>
+    <!-- Slider -->
+    <section class="hero-slider">
+        <div class="slide active">
+            <video muted playsinline class="bg-video">
+                <source src="video/video1.mp4" type="video/mp4">
+            </video>
+            <div class="hero-content">
+                <h1 aria-setsize="30">Air Max New</h1>
+                <h1 aria-setsize="48">2026 Coming Soon</h1>
                 <br>
-                <button class="btn-notify">Notify Me</button>
+                <div class="hero-actions">
+                    <button class="btn-notify">Shop Now</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="slider-controls-bottom">
-        <div class="dots-container">
-            <span class="dot active" onclick="currentSlide(0)"></span>
-            <span class="dot" onclick="currentSlide(1)"></span>
+        <div class="slide">
+            <video muted playsinline class="bg-video">
+                <source src="video/video2.mp4" type="video/mp4">
+            </video>
+            <div class="hero-content">
+                <div class="hero-actions">
+                    <h1 aria-setsize="30">Air Jordan 1</h1>
+                    <br>
+                    <button class="btn-notify">Notify Me</button>
+                </div>
+            </div>
         </div>
-        <div class="playback-controls">
-            <button id="playPauseBtn"><i class="fa-solid fa-pause"></i></button>
-            <button id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
-            <button id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
+
+        <div class="slider-controls-bottom">
+            <div class="dots-container">
+                <span class="dot active" onclick="currentSlide(0)"></span>
+                <span class="dot" onclick="currentSlide(1)"></span>
+            </div>
+            <div class="playback-controls">
+                <button id="playPauseBtn"><i class="fa-solid fa-pause"></i></button>
+                <button id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
+                <button id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
         </div>
-    </div>
-</section>
-<!-- =================================================================== -->
- <!-- Features -->
-  <section class="featured-section inner-content">
+    </section>
+    <!-- =================================================================== -->
+    <!-- Features -->
+    <section class="featured-section inner-content">
         <div class="featured-item">
             <img src="image/Golf.png" alt="Nike Golf">
             <div class="item-overlay">
@@ -325,31 +334,35 @@
                 <h3 class="item-title">Engineered to Win</h3>
                 <a href="#" class="btn-shop">Shop</a>
             </div>
-        </div> <div class="featured-item">
+        </div>
+        <div class="featured-item">
             <img src="image/Just do it.png" alt="Nike Tennis">
             <div class="item-overlay">
                 <p class="category">Nike Tennis Surf Symphony Collection</p>
                 <h3 class="item-title">It's About to Get Loud</h3>
                 <a href="#" class="btn-shop">Shop</a>
             </div>
-        </div> <div class="featured-item">
+        </div>
+        <div class="featured-item">
             <img src="image/Shoes.png" alt="Nike Shox">
             <div class="item-overlay">
                 <p class="category">Nike Shox</p>
                 <a href="#" class="btn-shop">Shop</a>
             </div>
-        </div> <div class="featured-item">
+        </div>
+        <div class="featured-item">
             <img src="image/UnderShoes.png" alt="ACG Ultrafly">
             <div class="item-overlay">
                 <p class="category">ACG Ultrafly</p>
                 <h3 class="item-title">Fast Incoming</h3>
                 <a href="#" class="btn-shop">Explore</a>
             </div>
-        </div> </div>
-</section>
+        </div>
+        </div>
+    </section>
 
 
-<!-- =================================================================== -->
+    <!-- =================================================================== -->
     <!-- Search Overlay -->
     <div class="search-overlay" id="searchOverlay">
         <div class="search-overlay-content">
@@ -385,65 +398,65 @@
 
 
     <footer class="nike-footer">
-    <div class="footer-container">
+        <div class="footer-container">
 
-        <!-- CỘT 1 -->
-        <div class="footer-column">
-            <h4>Find a Store</h4>
-            <ul>
-                <li><a href="#">Become a Member</a></li>
-                <li><a href="#">Sign Up for Email</a></li>
-                <li><a href="#">Send Us Feedback</a></li>
-                <li><a href="#">Student Discounts</a></li>
-            </ul>
+            <!-- CỘT 1 -->
+            <div class="footer-column">
+                <h4>Find a Store</h4>
+                <ul>
+                    <li><a href="#">Become a Member</a></li>
+                    <li><a href="#">Sign Up for Email</a></li>
+                    <li><a href="#">Send Us Feedback</a></li>
+                    <li><a href="#">Student Discounts</a></li>
+                </ul>
+            </div>
+
+            <!-- CỘT 2 -->
+            <div class="footer-column">
+                <h4>Get Help</h4>
+                <ul>
+                    <li><a href="#">Order Status</a></li>
+                    <li><a href="#">Delivery</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Payment Options</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <!-- CỘT 3 -->
+            <div class="footer-column">
+                <h4>About Nike</h4>
+                <ul>
+                    <li><a href="#">News</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Investors</a></li>
+                    <li><a href="#">Sustainability</a></li>
+                </ul>
+            </div>
+
+            <!-- CỘT 4 -->
+            <div class="footer-column">
+                <h4>Social</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
         </div>
 
-        <!-- CỘT 2 -->
-        <div class="footer-column">
-            <h4>Get Help</h4>
-            <ul>
-                <li><a href="#">Order Status</a></li>
-                <li><a href="#">Delivery</a></li>
-                <li><a href="#">Returns</a></li>
-                <li><a href="#">Payment Options</a></li>
-                <li><a href="#">Contact Us</a></li>
-            </ul>
-        </div>
-
-        <!-- CỘT 3 -->
-        <div class="footer-column">
-            <h4>About Nike</h4>
-            <ul>
-                <li><a href="#">News</a></li>
-                <li><a href="#">Careers</a></li>
-                <li><a href="#">Investors</a></li>
-                <li><a href="#">Sustainability</a></li>
-            </ul>
-        </div>
-
-        <!-- CỘT 4 -->
-        <div class="footer-column">
-            <h4>Social</h4>
-            <div class="social-icons">
-                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+        <div class="footer-bottom">
+            <span>© 2026 Nike, Inc. All Rights Reserved</span>
+            <div class="footer-links">
+                <a href="#">Guides</a>
+                <a href="#">Terms of Sale</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Privacy Policy</a>
             </div>
         </div>
-
-    </div>
-
-    <div class="footer-bottom">
-        <span>© 2026 Nike, Inc. All Rights Reserved</span>
-        <div class="footer-links">
-            <a href="#">Guides</a>
-            <a href="#">Terms of Sale</a>
-            <a href="#">Terms of Use</a>
-            <a href="#">Privacy Policy</a>
-        </div>
-    </div>
-</footer>
+    </footer>
 
     <!-- link script vào -->
     <script src="/image/js/index.js"></script>

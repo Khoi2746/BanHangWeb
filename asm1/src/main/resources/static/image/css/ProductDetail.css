@@ -60,7 +60,7 @@ body {
 .main-image-box img {
     width: auto;
     /* Thay vì 85% cố định */
-    height: 90%;
+    height: 100%;
     /* Ưu tiên chiều cao để không bị mất form áo */
     max-width: 100%;
     object-fit: contain;
@@ -103,7 +103,7 @@ body {
 .color-options img {
     width: 70px;
     /* Chỉnh về hình vuông */
-    height: 70px;
+    height: 80px;
     /* Chỉnh về hình vuông */
     border-radius: 8px;
     object-fit: cover;
@@ -150,7 +150,7 @@ body {
 /* ================= DETAILS LIST ================= */
 ul {
     margin-top: 28px;
-    padding-left: 18px;
+    padding: 25px;
 }
 
 ul li {

@@ -308,34 +308,50 @@
         <div class="cart-wrapper">
             
             <div class="cart-left">
-                <h2>Bag</h2>
+    <h2>Bag</h2>
 
-                <div th:if="${#lists.isEmpty(cartItems)}">
-                    <p class="empty-msg">There are no items in your bag.</p>
-                </div>
+    <div th:if="${#lists.isEmpty(cartItems)}">
+        <p class="empty-msg">There are no items in your bag.</p>
+        <a href="/home" style="text-decoration: underline;">Shop Now</a>
+    </div>
 
-                <div th:each="item : ${cartItems}" class="cart-item">
-                    <div class="item-img">
-                        <img th:src="${item.imageUrl.startsWith('http') ? item.imageUrl : '/images/' + item.imageUrl}" alt="">
-                    </div>
-                    <div class="item-details">
-                        <div class="item-name" th:text="${item.name}">Nike Air Force 1</div>
-                        <div class="item-cat" th:text="${item.category}">Men's Shoes</div>
-                        <div class="item-cat">Size 42</div> <div class="item-actions">
-                            <span><i class="fa-regular fa-heart"></i> Favourite</span>
-                            <span><i class="fa-regular fa-trash-can"></i> Remove</span>
-                        </div>
-                    </div>
-                    <div class="item-price" th:text="${#numbers.formatDecimal(item.price, 0, 'POINT', 0, 'COMMA')} + '₫'">
-                        3,519,000₫
-                    </div>
-                </div>
+    <div th:each="item : ${cartItems}" class="cart-item">
+        
+        <div class="item-img">
+            <img th:src="@{${item.product.imageUrl}}" alt="Product Image">
+        </div>
 
-                <div style="margin-top: 40px;">
-                    <h2>Favourites</h2>
-                    <p class="empty-msg">There are no items saved to your favourites.</p>
-                </div>
+        <div class="item-details">
+            <div class="item-name" th:text="${item.product.name}">Tên sản phẩm</div>
+            <div class="item-cat" th:text="${item.product.category}">Danh mục</div>
+            
+            <div class="item-cat" style="margin-top: 5px;">
+                Quantity: <span th:text="${item.quantity}">1</span>
             </div>
+
+            <div class="item-actions" style="display: flex; gap: 15px; margin-top: 10px;">
+                <form th:action="@{/favorites/toggle}" method="post">
+                    <input type="hidden" name="productId" th:value="${item.product.id}" />
+                    <button type="submit" style="background:none; border:none; cursor:pointer; font-size:14px; color: #757575;">
+                        <i class="fa-regular fa-heart"></i> Favourite
+                    </button>
+                </form>
+
+                <form th:action="@{/cart/remove}" method="post">
+                    <input type="hidden" name="cartItemId" th:value="${item.id}" />
+                    <button type="submit" style="background:none; border:none; cursor:pointer; font-size:14px; color: #757575;">
+                        <i class="fa-regular fa-trash-can"></i> Remove
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="item-price" th:text="${#numbers.formatDecimal(item.product.price * item.quantity, 0, 'POINT', 0, 'COMMA')} + '₫'">
+            Giá tiền
+        </div>
+    </div>
+    
+    </div>
 
             <div class="cart-right">
                 <h2>Summary</h2>

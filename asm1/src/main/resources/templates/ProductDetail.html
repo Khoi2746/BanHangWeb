@@ -315,13 +315,23 @@
             <img th:src="@{${product.imageUrl}}">
         </div>
 
-        <!-- Buttons -->
-        <button class="btn-black">
-            Thêm vào yêu thích
-        </button>
-        <button class="btn-black">
+        <div class="action-buttons" style="display: flex; gap: 15px; margin-bottom: 20px;">
+    
+    <form th:action="@{/favorites/toggle}" method="post">
+    <input type="hidden" name="productId" th:value="${product.id}" />
+    <button type="submit" class="btn-black">
+        <i class="fa-regular fa-heart"></i> Thêm vào yêu thích
+    </button>
+</form>
+
+    <form th:action="@{/cart/add}" method="post">
+        <input type="hidden" name="productId" th:value="${product.id}" />
+        <input type="hidden" name="quantity" value="1" /> <button type="submit" class="btn-black" style="background-color: #d43f3a; border-color: #d43f3a; color: white; cursor: pointer;">
             Mua ngay
         </button>
+    </form>
+
+</div>
 
         <!-- Product Details -->
         <ul>
