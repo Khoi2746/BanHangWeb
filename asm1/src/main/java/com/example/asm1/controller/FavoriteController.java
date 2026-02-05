@@ -1,73 +1,76 @@
 package com.example.asm1.controller;
 
 import com.example.asm1.Entity.Favorite;
-import com.example.asm1.Entity.RegisterForm;
 import com.example.asm1.Entity.Product;
+import com.example.asm1.Entity.User;
 import com.example.asm1.repository.FavoriteRepository;
 import com.example.asm1.repository.ProductRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/favorites")
 public class FavoriteController {
 
     @Autowired
     private FavoriteRepository favoriteRepository;
 
     @Autowired
-    private ProductRepository productRepository; // Để tìm sản phẩm trước khi thêm
+    private ProductRepository productRepository;
 
-    // 1. Hiển thị trang Favourites
-    @GetMapping("/favorites")
+    // ================= SHOW FAVORITES =================
+
+    @GetMapping
     public String showFavorites(HttpSession session, Model model) {
-        // Lấy User từ session (người đang đăng nhập)
-        RegisterForm loggedInUser = (RegisterForm) session.getAttribute("loggedInUser");
 
-        // Nếu chưa đăng nhập, đá về trang Login ngay
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+
         if (loggedInUser == null) {
             return "redirect:/login";
         }
 
-        // Lấy danh sách từ DB
-        List<Favorite> favList = favoriteRepository.findByUser(loggedInUser);
-        model.addAttribute("favorites", favList);
+        List<Favorite> favorites = favoriteRepository.findByUser(loggedInUser);
+        model.addAttribute("favorites", favorites);
 
-        return "favorite"; // Trả về file favorites.html của em
+        return "favorite"; // favorite.html
     }
 
-    // 2. Thêm hoặc Xóa sản phẩm khỏi danh sách yêu thích
-    @PostMapping("/favorites/toggle")
-    public String toggleFavorite(@RequestParam("productId") Long productId, HttpSession session) {
-        RegisterForm loggedInUser = (RegisterForm) session.getAttribute("loggedInUser");
+    // ================= TOGGLE FAVORITE =================
+
+    @PostMapping("/toggle")
+    public String toggleFavorite(
+            @RequestParam("productId") Long productId,
+            HttpSession session) {
+
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
             return "redirect:/login";
         }
 
-        // Kiểm tra xem đã yêu thích chưa
-        Favorite existingFav = favoriteRepository.findByUserAndProductId(loggedInUser, productId);
+        Favorite existingFavorite =
+                favoriteRepository.findByUserAndProduct_Id(loggedInUser, productId);
 
-        if (existingFav != null) {
-            // Nếu có rồi thì XÓA (unfavorite)
-            favoriteRepository.delete(existingFav);
+        if (existingFavorite != null) {
+            // ❌ Đã có → xóa
+            favoriteRepository.delete(existingFavorite);
         } else {
-            // Nếu chưa có thì THÊM MỚI
+            // ✅ Chưa có → thêm
             Product product = productRepository.findById(productId).orElse(null);
+
             if (product != null) {
-                Favorite newFav = new Favorite();
-                newFav.setUser(loggedInUser);
-                newFav.setProduct(product);
-                favoriteRepository.save(newFav);
+                Favorite favorite = new Favorite();
+                favorite.setUser(loggedInUser);
+                favorite.setProduct(product);
+                favoriteRepository.save(favorite);
             }
         }
 
-        return "redirect:/home"; // Quay lại trang chủ hoặc trang hiện tại
+        return "redirect:/home";
     }
 }
