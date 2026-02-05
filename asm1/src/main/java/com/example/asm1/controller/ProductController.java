@@ -16,7 +16,7 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
-    // ✅ Trang danh sách sản phẩm
+    // ✅ Trang danh sách sản phẩm (Mặc định)
     @GetMapping("/new-arrivals")
     public String showNewArrivalsPage(Model model) {
 
@@ -25,7 +25,7 @@ public class ProductController {
         model.addAttribute("products", listProducts);
         model.addAttribute("totalItems", listProducts.size());
 
-        return "NewArrival";
+        return "NewArrival"; // Tên file HTML của ku em
     }
 
     // ✅ Trang chi tiết sản phẩm
@@ -45,5 +45,26 @@ public class ProductController {
 
         // 4. Trả về trang chi tiết
         return "ProductDetail";
+    }
+
+    // 👇👇👇 PHẦN THÊM MỚI: CHỨC NĂNG TÌM KIẾM 👇👇👇
+
+    @GetMapping("/search")
+    public String searchProduct(@RequestParam("keyword") String keyword, Model model) {
+        
+        // 1. Gọi Repository để tìm sản phẩm có tên chứa từ khóa (không phân biệt hoa thường)
+        List<Product> searchResults = productRepository.findByNameContainingIgnoreCase(keyword);
+
+        // 2. Gửi danh sách kết quả sang HTML (Tái sử dụng biến "products")
+        model.addAttribute("products", searchResults);
+        
+        // 3. Gửi số lượng tìm thấy
+        model.addAttribute("totalItems", searchResults.size());
+
+        // 4. Gửi lại từ khóa để hiển thị tiêu đề (VD: Kết quả cho "Nike")
+        model.addAttribute("searchKeyword", keyword);
+
+        // 5. Trả về trang NewArrival để hiển thị danh sách như bình thường
+        return "NewArrival";
     }
 }

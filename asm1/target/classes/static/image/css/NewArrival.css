@@ -1052,3 +1052,75 @@ ul { list-style: none; }
     font-size: 16px;
     margin-top: 4px;
 }
+
+/* --- HEADER ACTIONS --- */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 25px; /* Khoảng cách giữa nút Hide Filter và Sort By */
+}
+
+.clickable {
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.clickable:hover { color: #757575; }
+
+/* --- SORT DROPDOWN --- */
+.sort-wrapper {
+    position: relative; /* Để menu con định vị theo thằng này */
+}
+
+.sort-menu {
+    position: absolute;
+    top: 30px; /* Cách nút Sort một chút */
+    
+    /* --- MẤU CHỐT ĐÂY NÈ KU EM --- */
+    right: 0;   /* Bám chặt lề PHẢI của nút cha */
+    left: auto; /* Bỏ bám trái (mặc định) đi */
+    
+    background-color: white;
+    width: 150px; /* Độ rộng menu */
+    padding: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    
+    /* Ẩn mặc định */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    z-index: 101;
+    
+    /* Căn chữ bên trong sang phải cho giống Nike */
+    text-align: right; 
+}
+
+/* Class active để hiện menu sort */
+.sort-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.sort-menu a {
+    display: block;
+    padding: 8px 20px;
+    font-size: 15px;
+    color: #111;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.sort-menu a:hover {
+    color: #757575; /* Màu xám khi di chuột vào */
+}
+
+/* Xoay mũi tên Sort */
+.arrow-sort { transition: transform 0.3s; }
+.arrow-sort.rotated { transform: rotate(180deg); }

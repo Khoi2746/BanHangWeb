@@ -272,13 +272,36 @@
         </div>
     </header>
 
+
     <div class="page-header">
-        <h1>New (<span th:text="${totalItems}">0</span>)</h1>
-        <div class="header-actions">
-            <span id="btnHideFilter" class="clickable">Hide Filters <i class="fa-solid fa-sliders"></i></span>
-            <span class="clickable">Sort By <i class="fa-solid fa-chevron-down"></i></span>
+    
+    <h1 th:if="${searchKeyword != null}">
+        Search Result for "<span th:text="${searchKeyword}"></span>" (<span th:text="${totalItems}">0</span>)
+    </h1>
+    <h1 th:unless="${searchKeyword != null}">
+        New (<span th:text="${totalItems}">0</span>)
+    </h1>
+    
+    <div class="header-actions">
+        <span id="btnHideFilter" class="clickable">
+            Hide Filters <i class="fa-solid fa-sliders"></i>
+        </span>
+
+        <div class="sort-wrapper">
+            <span id="btnSort" class="clickable">
+                Sort By <i class="fa-solid fa-chevron-down arrow-sort"></i>
+            </span>
+            
+            <div class="sort-menu" id="sortMenu">
+                <a href="#">Featured</a>
+                <a href="#">Newest</a>
+                <a href="#">Price: High-Low</a>
+                <a href="#">Price: Low-High</a>
+            </div>
         </div>
     </div>
+
+</div>
 
     <div class="container">
         <aside class="sidebar" id="mainSidebar">
@@ -325,9 +348,12 @@
         </div>
     </div>
 </div>
+
         </aside>
+        <!-- ==================================================== -->
 
         <main class="product-grid" id="productGrid">
+            
             
             <div class="product-card" th:each="product : ${products}">
 
@@ -350,28 +376,6 @@
     </div>
 
 </div>
-
-            
-
-            <div class="product-card" th:each="product : ${products}">
-                <div class="product-img-box">
-                    <img th:src="@{${product.imageUrl}}" alt="Product Image">
-                </div>
-                
-                <div class="product-info">
-                    <div class="tag-just-in" th:if="${product.isFeatured}">Just In</div>
-                    
-                    <h3 class="product-name" th:text="${product.name}">Nike Air Force 1</h3>
-                    
-                    <p class="product-category" th:text="${product.gender} + '\'s ' + ${product.category}">Women's Shoes</p>
-                    
-                    <p class="product-price" 
-                       th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')} + '₫'">
-                       3,519,000₫
-                    </p>
-                </div>
-            </div>
-
         </main>
     </div>
     <!-- =================================================================== -->

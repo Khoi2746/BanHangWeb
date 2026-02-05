@@ -13,4 +13,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Optional<Product> findById(Long productId); 
 
     List<Product> findByGenderAndCategory(String gender, String category);
+
+    List<Product> findByNameContainingIgnoreCase(String keyword);
 }
