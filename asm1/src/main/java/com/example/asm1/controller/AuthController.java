@@ -25,8 +25,8 @@ public class AuthController {
     public String showRegisterForm(Model model, HttpSession session) {
         String receivedEmail = (String) session.getAttribute("userEmail");
 
+        // Chặn nếu người dùng chưa qua bước nhập email
         if (receivedEmail == null || receivedEmail.isEmpty()) {
-            session.setAttribute("sessionError", "Vui lòng nhập email trước khi đăng ký!");
             return "redirect:/checkMail";
         }
 
@@ -43,33 +43,47 @@ public class AuthController {
                                   HttpSession session,
                                   Model model) {
 
-        // --- BƯỚC 1: VALIDATION ---
+        // --- BƯỚC 1: KIỂM TRA LỖI NHẬP LIỆU (VALIDATION) ---
         if (bindingResult.hasErrors()) {
-            return "register";
+            return "register"; // Trả về trang cũ để hiện lỗi đỏ
         }
 
-        // --- BƯỚC 2: CHECK OTP ---
+        // --- BƯỚC 2: KIỂM TRA MÃ OTP ---
         String correctOtp = (String) session.getAttribute("otpCode");
-        String userEnteredCode = registerForm.getCode();
-
-        if (correctOtp == null || !correctOtp.equals(userEnteredCode)) {
+        // Kiểm tra null để tránh lỗi nếu session hết hạn
+        if (correctOtp == null || !correctOtp.equals(registerForm.getCode())) {
             bindingResult.rejectValue("code", "error.registerForm", "Mã xác nhận không đúng hoặc đã hết hạn!");
             return "register";
         }
 
         // --- BƯỚC 3: LƯU DATABASE ---
         try {
-            // KHÚC QUAN TRỌNG: Chuyển dữ liệu từ Form sang Entity User
             User newUser = new User();
+            
+            // Map dữ liệu cơ bản
             newUser.setEmail(registerForm.getEmail());
             newUser.setPassword(registerForm.getPassword());
-            newUser.setFirstName(registerForm.getFirstName()); // Giả sử form có nhập tên
-            newUser.setSurname(registerForm.getSurname());     // Giả sử form có nhập họ
-            // Set thêm các trường mặc định nếu cần
+            newUser.setFirstName(registerForm.getFirstName());
+            newUser.setSurname(registerForm.getSurname());
+            newUser.setShoppingPreference(registerForm.getShoppingPreference());
             
-            userRepository.save(newUser); // Lưu Entity User, KHÔNG LƯU RegisterForm
+            // Map ngày sinh (QUAN TRỌNG: code cũ của em thiếu đoạn này)
+            newUser.setDobDay(registerForm.getDobDay());
+            newUser.setDobMonth(registerForm.getDobMonth());
+            newUser.setDobYear(registerForm.getDobYear());
+            
+            // Map checkbox
+            newUser.setEmailSignup(registerForm.isEmailSignup());
+            newUser.setAgreeTerms(registerForm.isAgreeTerms());
 
-            // Xóa session rác
+            // --- QUAN TRỌNG NHẤT: SET ROLE MẶC ĐỊNH ---
+            // Nếu không có dòng này, SQL Server sẽ báo lỗi vì role_id không được null
+            newUser.setRoleId(2); // Giả sử: 2 là User
+
+            // Lưu vào SQL Server
+            userRepository.save(newUser);
+
+            // Dọn dẹp session
             session.removeAttribute("otpCode");
             session.removeAttribute("userEmail");
 
@@ -77,12 +91,15 @@ public class AuthController {
             return "redirect:/login";
 
         } catch (Exception e) {
-            e.printStackTrace(); // In lỗi ra console để dễ debug
+            e.printStackTrace(); // In lỗi ra console để debug
             model.addAttribute("error", "Lỗi: Email này đã tồn tại hoặc lỗi hệ thống!");
             return "register";
         }
     }
 
+    // ... Giữ nguyên các hàm Login, Logout, Change Password bên dưới ...
+    // (Em copy lại các hàm bên dưới từ file cũ vào đây nhé)
+    
     // 3. GET: Trang Login
     @GetMapping("/login")
     public String showLoginPage() {
@@ -95,14 +112,9 @@ public class AuthController {
                                @RequestParam("password") String password,
                                HttpSession session,
                                Model model) {
-
-        // Tìm User (Entity) chứ không phải RegisterForm
         User userInDb = userRepository.findByEmail(email);
-
         if (userInDb != null && userInDb.getPassword().equals(password)) {
-            // Lưu User Entity vào session
             session.setAttribute("loggedInUser", userInDb);
-            System.out.println("LOG: Đăng nhập thành công: " + email);
             return "redirect:/home";
         } else {
             model.addAttribute("error", "Email hoặc mật khẩu không chính xác!");
