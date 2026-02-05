@@ -16,6 +16,11 @@
                 <div class="jordan-logo">
                     <img src="image/jordanIcon.png" alt="Jordan">
                 </div>
+                 <th:block th:if="${session.loggedInUser != null and session.loggedInUser.roleId == 1}">
+                   
+                            <a href="http://localhost:8080/admin/user/management">Quản Lý Người Dùng</a>
+                       
+                    </th:block>
                 <div class="top-right-links">
                     <a href="#">Find a Store</a>
                     <span>|</span>

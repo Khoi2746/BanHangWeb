@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quản lý người dùng</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f1f2f6;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #2f3640;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        form input, form select {
+            padding: 10px;
+            margin: 6px 0;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        form button {
+            margin-top: 10px;
+            padding: 10px 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            background: #44bd32;
+            color: #fff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        th {
+            background: #273c75;
+            color: white;
+            padding: 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f5f6fa;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .edit {
+            background: #fbc531;
+            color: #000;
+        }
+
+        .delete {
+            background: #e84118;
+            color: white;
+        }
+
+        .actions form {
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Quản lý người dùng</h1>
+
+<div class="card">
+    <h3>Thêm / chỉnh sửa người dùng</h3>
+
+   <form th:action="@{/admin/user/save}" method="post" th:object="${user}">
+    <input type="hidden" th:field="*{id}">
+
+    <input type="text" th:field="*{firstName}" placeholder="First name" required>
+    <input type="text" th:field="*{surname}" placeholder="Last name" required>
+    <input type="email" th:field="*{email}" placeholder="Email" required>
+
+    <!-- ✅ THÊM PASSWORD -->
+    <input type="password" name="password"
+           placeholder="Mật khẩu (để trống nếu không đổi)">
+
+    <select th:field="*{roleId}">
+        <option value="1">Admin</option>
+        <option value="2">User</option>
+    </select>
+
+    <button type="submit">Lưu người dùng</button>
+</form>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Họ tên</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="u : ${users}">
+        <td th:text="${u.id}"></td>
+        <td th:text="${u.firstName + ' ' + u.surname}"></td>
+        <td th:text="${u.email}"></td>
+        <td th:text="${u.roleId == 1 ? 'Admin' : 'User'}"></td>
+        <td class="actions">
+            <form th:action="@{/admin/user/edit/{id}(id=${u.id})}" method="get">
+                <button type="submit" class="btn edit">Edit</button>
+            </form>
+
+            <form th:action="@{/admin/user/delete/{id}(id=${u.id})}" method="post">
+                <button type="submit" class="btn delete"
+                        onclick="return confirm('Xóa người dùng này?')">
+                    Delete
+                </button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
