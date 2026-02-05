@@ -139,7 +139,7 @@ public class ShoppingController {
         Product product = productRepository.findById(productId).orElse(null);
         if (product != null) {
             // 1. Tìm tất cả các dòng trùng lặp (trả về List)
-            List<Favorite> existList = (List<Favorite>) favoriteRepository.findByUserAndProduct_Id(user, productId);
+            List<Favorite> existList = favoriteRepository.findByUserAndProduct_Id(user, productId);
 
             if (!existList.isEmpty()) {
                 // 2. Nếu có (dù 1 hay nhiều dòng) -> XÓA HẾT
