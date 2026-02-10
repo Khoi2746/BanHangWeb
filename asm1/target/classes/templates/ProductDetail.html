@@ -16,6 +16,9 @@
                     <img th:src="@{/image/jordanIcon.png}" alt="Jordan">
                 </div>
                 <div class="top-right-links">
+                    <th:block th:if="${session.loggedInUser != null and session.loggedInUser.roleId == 1}">
+                            <a href="http://localhost:8080/admin/user/management">Quản Lý Người Dùng</a>
+                    </th:block>|
                     <a href="#">Find a Store</a>
                     <span>|</span>
                     <a href="#">Help</a>
@@ -28,11 +31,19 @@
                     </th:block>
 
                     <th:block th:unless="${session.loggedInUser == null}">
-                        <span style="font-weight: 600;">
-                            Hi, <span th:text="${session.loggedInUser.firstName}">Member</span>
-                        </span>
-                        <span>|</span>
-                        <a th:href="@{/logout}" style="color: #d43f3a;">Log Out</a>
+                        <div class="user-dropdown">
+                            <div class="user-name-wrapper">
+                                Hi, <span th:text="${session.loggedInUser.firstName}">Member</span>
+                                <i class="fa-solid fa-chevron-down arrow-icon"></i>
+                            </div>
+                            <div class="dropdown-content">
+                                <a th:href="@{/profile}">Profile Detail</a>
+                                <hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 0;">
+                                <a th:href="@{/change-password}">Change Password</a>
+                                <hr style="border: 0; border-top: 1px solid #f0f0f0; margin: 0;">
+                                <a th:href="@{/logout}" style="color: #d43f3a !important;">Log Out</a>
+                            </div>
+                        </div>
                     </th:block>
                 </div>
             </div>
@@ -54,200 +65,11 @@
                                     <h3>Featured</h3>
                                     <ul>
                                         <li><a href="http://localhost:8080/new-arrivals">New Arrivals</a></li>
-                                        <li><a href="#">Bestsellers</a></li>
-                                        <li><a href="#">Shop All Sale</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown-column">
-                                    <h3>Shop Icons</h3>
-                                    <ul>
-                                        <li><a href="#">Air Force 1</a></li>
-                                        <li><a href="#">Air Jordan 1</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown-column">
-                                    <h3>Trending</h3>
-                                    <ul>
-                                        <li><a href="#">Shop Sport</a></li>
-                                        <li><a href="#">Adidas vs Nike</a></li>
-                                        <li><a href="#">Retro Running</a></li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="nav-item">
-                        <a href="#">Men</a>
-                        <div class="dropdown-menu">
-                            <div class="dropdown-inner">
-                                <div class="dropdown-column">
-                                    <h3>Featured</h3>
-                                    <ul>
-                                        <li><a href="#">New Arrivals</a></li>
-                                        <li><a href="#">Bestsellers</a></li>
-                                        <li><a href="#">Shop All Sale</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown-column">
-                                    <h3>Shoes</h3>
-                                    <ul>
-                                        <li><a href="#">All Shoes</a></li>
-                                        <li><a href="#">Lifestyle</a></li>
-                                        <li><a href="#">Jordan</a></li>
-                                        <li><a href="#">Running</a></li>
-                                        <li><a href="#">Basketball</a></li>
-                                        <li><a href="#">Football</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown-column">
-                                    <h3>Clothing</h3>
-                                    <ul>
-                                        <li><a href="#">All Clothing</a></li>
-                                        <li><a href="#">Tops & T-Shirts</a></li>
-                                        <li><a href="#">Shorts</a></li>
-                                        <li><a href="#">Hoodies & Sweatshirts</a></li>
-                                        <li><a href="#">Pants & Leggings</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown-column">
-                                    <h3>Accessories</h3>
-                                    <ul>
-                                        <li><a href="#">All Accessories</a></li>
-                                        <li><a href="#">Bags & Backpacks</a></li>
-                                        <li><a href="#">Socks</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="nav-item">
-                        <a href="#">Women</a>
-                        <div class="dropdown-menu">
-                            <div class="dropdown-inner">
-                                <div class="dropdown-column">
-                                    <h3>Featured</h3>
-                                    <ul>
-                                        <li><a href="#">New Arrivals</a></li>
-                                        <li><a href="#">Bestsellers</a></li>
-                                        <li><a href="#">Shop All Sale</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown-column">
-                                    <h3>Shoes</h3>
-                                    <ul>
-                                        <li><a href="#">All Shoes</a></li>
-                                        <li><a href="#">Lifestyle</a></li>
-                                        <li><a href="#">Running</a></li>
-                                        <li><a href="#">Gym & Training</a></li>
-                                        <li><a href="#">Jordan</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown-column">
-                                    <h3>Clothing</h3>
-                                    <ul>
-                                        <li><a href="#">All Clothing</a></li>
-                                        <li><a href="#">Performance Essentials</a></li>
-                                        <li><a href="#">Sports Bras</a></li>
-                                        <li><a href="#">Pants & Leggings</a></li>
-                                        <li><a href="#">Tops & T-Shirts</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown-column">
-                                    <h3>Accessories</h3>
-                                    <ul>
-                                        <li><a href="#">Bags & Backpacks</a></li>
-                                        <li><a href="#">Socks</a></li>
-                                        <li><a href="#">Hats & Headwear</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="nav-item">
-                        <a href="#">Kids</a>
-                        <div class="dropdown-menu">
-                            <div class="dropdown-inner">
-                                <div class="dropdown-column">
-                                    <h3>Featured</h3>
-                                    <ul>
-                                        <li><a href="#">New Arrivals</a></li>
-                                        <li><a href="#">Bestsellers</a></li>
-                                        <li><a href="#">Back to School</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown-column">
-                                    <h3>Shoes</h3>
-                                    <ul>
-                                        <li><a href="#">All Shoes</a></li>
-                                        <li><a href="#">Lifestyle</a></li>
-                                        <li><a href="#">Jordan</a></li>
-                                        <li><a href="#">Football</a></li>
-                                        <li><a href="#">Running</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown-column">
-                                    <h3>Clothing</h3>
-                                    <ul>
-                                        <li><a href="#">All Clothing</a></li>
-                                        <li><a href="#">Tops & T-Shirts</a></li>
-                                        <li><a href="#">Sport Bras</a></li>
-                                        <li><a href="#">Hoodies & Sweatshirts</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown-column">
-                                    <h3>Kids By Age</h3>
-                                    <ul>
-                                        <li><a href="#">Older Kids (7 - 14 years)</a></li>
-                                        <li><a href="#">Younger Kids (4 - 7 years)</a></li>
-                                        <li><a href="#">Babies & Toddlers (0 - 4 years)</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="nav-item">
-                        <a href="#">Sale</a>
-                        <div class="dropdown-menu">
-                            <div class="dropdown-inner">
-                                <div class="dropdown-column">
-                                    <h3>Sale & Offers</h3>
-                                    <ul>
-                                        <li><a href="#">Shop All Sale</a></li>
-                                        <li><a href="#">Bestsellers</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown-column">
-                                    <h3>Men's Sale</h3>
-                                    <ul>
-                                        <li><a href="#">Shoes</a></li>
-                                        <li><a href="#">Clothing</a></li>
-                                        <li><a href="#">Accessories</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown-column">
-                                    <h3>Women's Sale</h3>
-                                    <ul>
-                                        <li><a href="#">Shoes</a></li>
-                                        <li><a href="#">Clothing</a></li>
-                                        <li><a href="#">Accessories</a></li>
-                                    </ul>
-                                </div>
-                                <div class="dropdown-column">
-                                    <h3>Kids' Sale</h3>
-                                    <ul>
-                                        <li><a href="#">Shoes</a></li>
-                                        <li><a href="#">Clothing</a></li>
-                                        <li><a href="#">Accessories</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
                 <div class="nav-backdrop"></div>
 
@@ -256,8 +78,10 @@
                         <i class="fa-solid fa-magnifying-glass search-icon-btn"></i>
                         <input type="text" placeholder="Search">
                     </div>
-                    <a href="http://localhost:8080/favorites" class="action-icon"><i class="fa-regular fa-heart"></i></a>
-                    <a href="http://localhost:8080/cart" class="action-icon"><i class="fa-solid fa-bag-shopping"></i></a>
+                    <a href="http://localhost:8080/favorites" class="action-icon"><i
+                            class="fa-regular fa-heart"></i></a>
+                    <a href="http://localhost:8080/cart" class="action-icon"><i
+                            class="fa-solid fa-bag-shopping"></i></a>
                 </div>
             </div>
         </nav>
@@ -326,8 +150,8 @@
 
     <form th:action="@{/cart/add}" method="post">
         <input type="hidden" name="productId" th:value="${product.id}" />
-        <input type="hidden" name="quantity" value="1" /> <button type="submit" class="btn-black" style="background-color: #d43f3a; border-color: #d43f3a; color: white; cursor: pointer;">
-            Mua ngay
+        <input type="hidden" name="quantity" value="1" /> <button type="submit" class="btn-black" style=" cursor: pointer;">
+            Add To Bag
         </button>
     </form>
 
