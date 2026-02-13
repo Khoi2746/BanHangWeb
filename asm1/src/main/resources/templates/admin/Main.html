@@ -73,6 +73,7 @@
             margin-bottom: 15px;
         }
 
+        /* Trạng thái mặc định cho tất cả các ô: Tối và chữ xám */
         .menu-items a {
             display: flex;
             align-items: center;
@@ -82,12 +83,23 @@
             font-size: 15px;
             font-weight: 500;
             color: #aaa;
-            transition: all 0.3s;
+            /* Chữ xám tối */
+            background-color: transparent;
+            /* Nền trong suốt (tối theo sidebar) */
+            transition: all 0.3s ease;
+            text-decoration: none;
         }
 
-        .menu-items a:hover,
-        .menu-items a.active {
+        /* Hiệu ứng HOVER: Khi đưa chuột vào bất kỳ ô nào thì nó mới sáng lên */
+        .menu-items a:hover {
             background-color: #333;
+            /* Nền xám nhạt hiện lên */
+            color: #fff;
+            /* Chữ trắng tinh */
+        }
+
+        /* Icon cũng sẽ trắng theo khi hover */
+        .menu-items a:hover i {
             color: #fff;
         }
 
@@ -253,7 +265,7 @@
         </div>
 
         <div class="sidebar-bottom">
-            <a th:href="@{/}" class="bottom-link"><i class="fa-solid fa-house"></i> Return HomePage</a>
+            <a th:href="@{/home}" class="bottom-link"><i class="fa-solid fa-house"></i> Return HomePage</a>
             <a th:href="@{/logout}" class="bottom-link" style="color: #d43f3a;"><i
                     class="fa-solid fa-right-from-bracket"></i> Log Out</a>
         </div>

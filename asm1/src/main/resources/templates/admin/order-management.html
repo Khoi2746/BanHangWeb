@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Order Management | Nike Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* GIỮ NGUYÊN CSS SIDEBAR VÀ LAYOUT NHƯ CÁC TRANG TRƯỚC */
-       /* ================= RESET & BASIC ================= */
+        /* ================= RESET & BASIC ================= */
         * {
             margin: 0;
             padding: 0;
@@ -98,20 +99,65 @@
             align-items: center;
             gap: 10px;
         }
-        
-        /* TABLE STYLE */
-        .table-container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th { text-align: left; padding: 15px; border-bottom: 2px solid #eee; color: #757575; font-size: 14px; text-transform: uppercase; }
-        td { padding: 15px; border-bottom: 1px solid #eee; font-size: 15px; }
-        
-        /* STATUS BADGES */
-        .badge { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-        .status-pending { background: #fff3cd; color: #856404; }
-        .status-shipping { background: #cce5ff; color: #004085; }
-        .status-delivered { background: #d4edda; color: #155724; }
 
-        .btn-view { color: #111; font-weight: 600; text-decoration: underline; cursor: pointer; }
+        /* TABLE STYLE */
+        .table-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            border-bottom: 2px solid #eee;
+            color: #757575;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 15px;
+        }
+
+        /* STATUS BADGES */
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-shipping {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .status-delivered {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .btn-view {
+            color: #111;
+            font-weight: 600;
+            text-decoration: underline;
+            cursor: pointer;
+        }
 
         /* ================= RESET & BASIC ================= */
         * {
@@ -178,6 +224,7 @@
             margin-bottom: 15px;
         }
 
+        /* Trạng thái mặc định cho tất cả các ô: Tối và chữ xám */
         .menu-items a {
             display: flex;
             align-items: center;
@@ -187,13 +234,34 @@
             font-size: 15px;
             font-weight: 500;
             color: #aaa;
-            transition: all 0.3s;
+            /* Chữ xám tối */
+            background-color: transparent;
+            /* Nền trong suốt (tối theo sidebar) */
+            transition: all 0.3s ease;
+            text-decoration: none;
         }
 
-        .menu-items a:hover,
-        .menu-items a.active {
+        /* Hiệu ứng HOVER: Khi đưa chuột vào bất kỳ ô nào thì nó mới sáng lên */
+        .menu-items a:hover {
             background-color: #333;
+            /* Nền xám nhạt hiện lên */
             color: #fff;
+            /* Chữ trắng tinh */
+        }
+
+        /* Icon cũng sẽ trắng theo khi hover */
+        .menu-items a:hover i {
+            color: #fff;
+        }
+
+        .logout-btn {
+            color: #d43f3a;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .logout-btn {
@@ -338,8 +406,9 @@
         }
     </style>
 </head>
+
 <body>
-     <aside class="sidebar">
+    <aside class="sidebar">
         <div class="sidebar-top">
             <div class="logo-area">
                 <img src="/image/icon.png" alt="Nike Logo">
@@ -357,7 +426,8 @@
 
         <div class="sidebar-bottom">
             <a th:href="@{/home}" class="bottom-link"><i class="fa-solid fa-house"></i> Return HomePage</a>
-            <a th:href="@{/logout}" class="bottom-link" style="color: #d43f3a;"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+            <a th:href="@{/logout}" class="bottom-link" style="color: #d43f3a;"><i
+                    class="fa-solid fa-right-from-bracket"></i> Log Out</a>
         </div>
     </aside>
 
@@ -384,10 +454,11 @@
                         <td th:text="'#' + ${order.id}">#1</td>
                         <td th:text="${order.user.firstName + ' ' + order.user.surname}">John Doe</td>
                         <td th:text="${#dates.format(order.orderDate, 'dd-MM-yyyy HH:mm')}">14-02-2026</td>
-                        <td th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'POINT', 0, 'COMMA')} + '₫'">3.000.000₫</td>
+                        <td th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'POINT', 0, 'COMMA')} + '₫'">
+                            3.000.000₫</td>
                         <td>
-                            <span th:class="'badge status-' + ${order.status.toLowerCase()}" 
-                                  th:text="${order.status}">Pending</span>
+                            <span th:class="'badge status-' + ${order.status.toLowerCase()}"
+                                th:text="${order.status}">Pending</span>
                         </td>
                         <td>
                             <a th:href="@{/admin/orders/detail/{id}(id=${order.id})}" class="btn-view">View Details</a>
@@ -398,4 +469,5 @@
         </div>
     </main>
 </body>
+
 </html>

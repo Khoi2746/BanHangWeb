@@ -24,6 +24,7 @@ public class AdminDashboardController {
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
+        model.addAttribute("activePage", "dashboard");
         
         // 2. SỬA CHỖ NÀY: Gọi bằng 'orderRepository' (chữ o thường), KHÔNG gọi bằng 'OrderRepository'
         List<Order> latestOrders = orderRepository.findTop5ByOrderByOrderDateDesc();

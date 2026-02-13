@@ -17,6 +17,7 @@ public class AdminProductController {
     // 1. Hiển thị danh sách & Form thêm mới
     @GetMapping("")
     public String listProducts(Model model) {
+        model.addAttribute("activePage", "products");
         model.addAttribute("products", productRepository.findAll());
         model.addAttribute("product", new Product()); // Form rỗng để thêm mới
         return "admin/product-management"; // Tên file HTML

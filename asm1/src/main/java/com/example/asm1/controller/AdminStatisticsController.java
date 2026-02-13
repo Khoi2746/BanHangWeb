@@ -10,6 +10,7 @@ public class AdminStatisticsController {
 
     @GetMapping("/statistics")
     public String showStatistics() {
+        
         return "admin/statistics"; // Trỏ về file templates/admin/statistics.html
     }
 }

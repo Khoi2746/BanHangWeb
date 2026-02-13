@@ -19,6 +19,7 @@ public class AdminOrderController {
     // 1. Xem danh sách tất cả đơn hàng
     @GetMapping("")
     public String listOrders(Model model) {
+       model.addAttribute("activePage", "orders");
         model.addAttribute("orders", orderRepository.findAll());
         return "admin/order-management";
     }
