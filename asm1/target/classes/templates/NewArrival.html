@@ -16,7 +16,7 @@
                 </div>
                 <div class="top-right-links">
                     <th:block th:if="${session.loggedInUser != null and session.loggedInUser.roleId == 1}">
-                            <a href="http://localhost:8080/admin/user/management">Quản Lý Người Dùng</a>
+                            <a href="http://localhost:8080/admin/dashboard" style="font-weight: bold;">ADMIN DASHBOARD</a>
                     </th:block>|
                     <a href="#">Find a Store</a>
                     <span>|</span>
@@ -99,7 +99,7 @@
 
     <div class="page-header">
     
-    <h1 th:if="${searchKeyword != null}">
+    <h1 th:if="${searchKeyword != null}">      
         Search Result for "<span th:text="${searchKeyword}"></span>" (<span th:text="${totalItems}">0</span>)
     </h1>
     <h1 th:unless="${searchKeyword != null}">
@@ -118,38 +118,28 @@
         <aside class="sidebar" id="mainSidebar">
             <ul class="category-list">
          <li><a th:href="@{/products(category='Shoes')}">Shoes</a></li>
-<li><a th:href="@{/products(category='Clothing')}">Clothing</a></li>
+         <li><a th:href="@{/products(category='Clothing')}">Clothing</a></li>
             </ul>
-
             <div class="filter-section">
     <div class="filter-group">
-        <div class="filter-header">Gender <span class="arrow rotated"><i class="fa-solid fa-chevron-up"></i></span></div>
-        <div class="filter-content collapsed">
-    <label>
-<form method="get" action="/products">
-    <label>
-        <input type="checkbox" name="gender" value="Men"> Men
-    </label>
-    <label>
-        <input type="checkbox" name="gender" value="Women"> Women
-    </label>
-    <label>
-        <input type="checkbox" name="gender" value="Kids"> Kids
-    </label>
-    <button type="submit">Apply</button>
-</form>
-        </div>
-    </div>
-
-    <div class="filter-group">
-       <form action="/products" method="get" id="filterForm">
-
-    <!-- KIDS -->
+    <div class="filter-header">Gender <span class="arrow rotated"><i class="fa-solid fa-chevron-up"></i></span></div>
     
-
-</form>
+    <div class="filter-content collapsed">
+        <form method="get" action="/products">
+            <label>
+                <input type="checkbox" name="gender" value="Men" th:checked="${param.gender != null && #lists.contains(param.gender, 'Men')}"> Men
+            </label>
+            <label>
+                <input type="checkbox" name="gender" value="Women" th:checked="${param.gender != null && #lists.contains(param.gender, 'Women')}"> Women
+            </label>
+            <label>
+                <input type="checkbox" name="gender" value="Kids" th:checked="${param.gender != null && #lists.contains(param.gender, 'Kids')}"> Kids
+            </label>
+            
+            <button type="submit" class="filter-apply-btn">Apply</button>
+        </form>
     </div>
-
+</div>
     <div class="filter-group">
         <div class="filter-header">Shop By Price <span class="arrow rotated"><i class="fa-solid fa-chevron-up"></i></span></div>
         <div class="filter-content collapsed">
@@ -160,6 +150,7 @@
     </div>
     
 </div>
+
 
         </aside>
         <!-- ==================================================== -->
@@ -179,7 +170,7 @@
     <div class="product-info">
         <h3 th:text="${product.name}"></h3>
 
-        <p th:text="${product.gender} + '\'s ' + ${product.category}">
+        <p th:text="${product.gender} + '\'s ' + ${product.category}"> 
         </p>
 
         <p class="product-price"

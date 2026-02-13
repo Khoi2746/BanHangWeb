@@ -18,7 +18,7 @@ public class UserController {
     public String management(Model model) {
         model.addAttribute("users", userRepository.findAll());
         model.addAttribute("user", new User());
-        return "admin/users";
+        return "admin/User";
     }
 
     @PostMapping("/save")
@@ -50,7 +50,7 @@ public class UserController {
         model.addAttribute("user",
                 userRepository.findById(id).orElseThrow());
         model.addAttribute("users", userRepository.findAll());
-        return "admin/users";
+        return "admin/User";
     }
 
     @PostMapping("/delete/{id}")
