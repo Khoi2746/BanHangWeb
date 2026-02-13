@@ -23,4 +23,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     
     // 3. Xóa các sản phẩm trong giỏ hàng của User (Dùng khi thanh toán xong)
     void deleteByUser(User user);
+
+    List<CartItem> findByUserId(Long userId);
+
 }

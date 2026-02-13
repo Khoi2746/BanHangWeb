@@ -151,18 +151,21 @@
     <aside class="sidebar">
         <div class="sidebar-top">
             <div class="logo-area">
-                <img src="/image/icon.png" alt="Nike Logo"> 
+                <img src="/image/icon.png" alt="Nike Logo">
                 <h2>Admin Dashboard</h2>
             </div>
+
             <ul class="menu-items">
-                <li><a th:href="@{/admin/dashboard}"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
-                <li><a th:href="@{/admin/products}" class="active"><i class="fa-solid fa-box-open"></i> Products</a></li>
+                <li><a th:href="@{/admin/dashboard}" class="active"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a th:href="@{/admin/products}"><i class="fa-solid fa-box-open"></i> Products</a></li>
                 <li><a th:href="@{/admin/user/management}"><i class="fa-solid fa-users"></i> Users</a></li>
                 <li><a th:href="@{/admin/statistics}"><i class="fa-solid fa-chart-line"></i> Statistics</a></li>
+                <li><a th:href="@{/admin/orders}"><i class="fa-solid fa-file-invoice-dollar"></i> Orders</a></li>
             </ul>
         </div>
+
         <div class="sidebar-bottom">
-            <a th:href="@{/}" class="bottom-link"><i class="fa-solid fa-house"></i> Return HomePage</a>   
+            <a th:href="@{/home}" class="bottom-link"><i class="fa-solid fa-house"></i> Return HomePage</a>
             <a th:href="@{/logout}" class="bottom-link" style="color: #d43f3a;"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
         </div>
     </aside>
