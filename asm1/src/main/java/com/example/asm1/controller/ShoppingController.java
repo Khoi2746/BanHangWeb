@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable; // Thêm import này
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -30,7 +31,7 @@ public class ShoppingController {
     private ProductRepository productRepository;
 
     // =========================================================
-    // 1. QUAN TRỌNG NHẤT: HÀM HIỂN THỊ GIỎ HÀNG & TÍNH TIỀN
+    // 1. HIỂN THỊ GIỎ HÀNG & TÍNH TIỀN
     // =========================================================
     @GetMapping("/cart")
     public String viewCart(HttpSession session, Model model) {
@@ -39,29 +40,62 @@ public class ShoppingController {
             return "redirect:/login";
         }
 
-        // a. Lấy danh sách sản phẩm trong giỏ của User này
-        List<CartItem> cartItems = cartItemRepository.findByUser(user);
-        
-        // b. Tính tổng tiền (Loop qua từng món để nhân giá x số lượng)
+        // Lấy danh sách sản phẩm trong giỏ của User này
+        List<CartItem> cartItems = cartItemRepository.findByUserId(user.getId());
+
+        // Tính tổng tiền
         double totalAmount = 0;
         for (CartItem item : cartItems) {
-            // Giả sử mỗi sản phẩm đều có giá, nếu null sẽ lỗi nên cần kiểm tra
-            if (item.getProduct().getPrice() != null) {
+            if (item.getProduct() != null && item.getProduct().getPrice() != null) {
                 totalAmount += item.getProduct().getPrice() * item.getQuantity();
             }
         }
 
-        // c. Gửi dữ liệu sang file HTML
         model.addAttribute("cartItems", cartItems);
-        model.addAttribute("subtotal", totalAmount); // Tạm tính
-        model.addAttribute("total", totalAmount);    // Tổng cộng
+        model.addAttribute("subtotal", totalAmount);
+        model.addAttribute("total", totalAmount);
 
-        // d. Trả về tên file HTML (chữ thường cho chuẩn)
         return "cart"; 
     }
 
     // =========================================================
-    // 2. XỬ LÝ THÊM VÀO GIỎ HÀNG
+    // 2. XỬ LÝ TĂNG / GIẢM SỐ LƯỢNG (MỚI THÊM VÀO ĐÂY)
+    // =========================================================
+    @GetMapping("/cart/update/{id}/{action}")
+    public String updateQuantity(@PathVariable("id") Long cartItemId,
+                                 @PathVariable("action") String action,
+                                 HttpSession session) {
+        
+        User user = (User) session.getAttribute("loggedInUser");
+        if (user == null) return "redirect:/login";
+
+        // Tìm dòng trong giỏ hàng cần sửa
+        CartItem item = cartItemRepository.findById(cartItemId).orElse(null);
+
+        // Chỉ cho phép sửa nếu item tồn tại và thuộc về User đang đăng nhập (bảo mật)
+        if (item != null && item.getUser().getId().equals(user.getId())) {
+            
+            // Logic TĂNG
+            if ("increase".equals(action)) {
+                item.setQuantity(item.getQuantity() + 1);
+                cartItemRepository.save(item);
+            } 
+            // Logic GIẢM
+            else if ("decrease".equals(action)) {
+                if (item.getQuantity() > 1) {
+                    item.setQuantity(item.getQuantity() - 1);
+                    cartItemRepository.save(item);
+                }
+                // Nếu đang là 1 mà bấm giảm thì giữ nguyên (hoặc em có thể gọi delete để xóa luôn)
+            }
+        }
+
+        // Load lại trang giỏ hàng để cập nhật giá tiền
+        return "redirect:/cart";
+    }
+
+    // =========================================================
+    // 3. THÊM VÀO GIỎ HÀNG (Logic cũ giữ nguyên)
     // =========================================================
     @PostMapping("/cart/add")
     public String addToCart(@RequestParam("productId") Long productId,
@@ -86,16 +120,12 @@ public class ShoppingController {
                 cartItemRepository.save(newItem);
             }
         }
-
-        // QUAN TRỌNG: Dùng "redirect" để chuyển sang hàm viewCart ở trên
-        // Nó sẽ giúp tính toán lại tiền nong trước khi hiển thị
         return "redirect:/cart"; 
     }
 
     // =========================================================
-    // 3. CÁC CHỨC NĂNG KHÁC (Xóa, Checkout, Yêu thích...)
+    // 4. XÓA KHỎI GIỎ HÀNG
     // =========================================================
-
     @PostMapping("/cart/remove")
     public String removeFromCart(@RequestParam("cartItemId") Long cartItemId, HttpSession session) {
         User user = (User) session.getAttribute("loggedInUser");
@@ -106,21 +136,26 @@ public class ShoppingController {
                 cartItemRepository.delete(item);
             }
         });
-        return "redirect:/cart"; // Xóa xong load lại trang Cart để cập nhật tiền
+        return "redirect:/cart"; 
     }
+
+    // =========================================================
+    // 5. CÁC CHỨC NĂNG KHÁC (Checkout, Favorite...)
+    // =========================================================
 
     @PostMapping("/cart/checkout")
     public String checkout(HttpSession session) {
         User user = (User) session.getAttribute("loggedInUser");
         if (user == null) return "redirect:/login";
 
-        List<CartItem> items = cartItemRepository.findByUser(user);
+        // Logic checkout: Tạo đơn hàng (Order) -> Lưu OrderDetails -> Xóa giỏ hàng
+        // Tạm thời em đang để xóa giỏ hàng
+        List<CartItem> items = cartItemRepository.findByUserId(user.getId());
         cartItemRepository.deleteAll(items);
 
         return "redirect:/home";
     }
 
-    // --- YÊU THÍCH ---
     @GetMapping("/favorites")
     public String viewFavorites(HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggedInUser");
@@ -136,16 +171,12 @@ public class ShoppingController {
         User user = (User) session.getAttribute("loggedInUser");
         if (user == null) return "redirect:/login";
 
-        Product product = productRepository.findById(productId).orElse(null);
-        if (product != null) {
-            // 1. Tìm tất cả các dòng trùng lặp (trả về List)
-            List<Favorite> existList = favoriteRepository.findByUserAndProduct_Id(user, productId);
-
-            if (!existList.isEmpty()) {
-                // 2. Nếu có (dù 1 hay nhiều dòng) -> XÓA HẾT
-                favoriteRepository.deleteAll(existList);
-            } else {
-                // 3. Nếu chưa có -> THÊM MỚI
+        List<Favorite> existList = favoriteRepository.findByUserAndProduct_Id(user, productId);
+        if (!existList.isEmpty()) {
+            favoriteRepository.deleteAll(existList);
+        } else {
+            Product product = productRepository.findById(productId).orElse(null);
+            if (product != null) {
                 Favorite newFav = new Favorite();
                 newFav.setUser(user);
                 newFav.setProduct(product);

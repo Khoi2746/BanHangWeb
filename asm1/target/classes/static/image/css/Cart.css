@@ -638,6 +638,52 @@ h2 { font-size: 22px; font-weight: 500; margin-bottom: 20px; }
     .cart-left, .cart-right { width: 100%; }
 }
 
+/* Style cho bộ điều khiển số lượng */
+    .quantity-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Khoảng cách giữa chữ Quantity và các nút */
+        margin-top: 10px;
+    }
+
+    .qty-btn-group {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-qty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border: 1px solid #ccc;
+        border-radius: 50%; /* Làm tròn nút */
+        background-color: white;
+        color: #333;
+        text-decoration: none;
+        font-size: 12px;
+        transition: all 0.2s;
+    }
+
+    .btn-qty:hover {
+        background-color: #111;
+        color: #fff;
+        border-color: #111;
+    }
+
+    .qty-input {
+        width: 35px;
+        text-align: center;
+        border: none;
+        font-weight: 600;
+        font-size: 14px;
+        color: #111;
+        outline: none;
+        background: transparent;
+    }
+
 /* ==========================================================================
    6. FOOTER
    ========================================================================== */

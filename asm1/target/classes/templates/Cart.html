@@ -151,10 +151,21 @@
                         <div class="item-name" th:text="${item.product.name}">Tên sản phẩm</div>
                         <div class="item-cat" th:text="${item.product.category}">Danh mục</div>
 
-                        <div class="item-cat" style="margin-top: 5px;">
-                            Quantity: <span th:text="${item.quantity}">1</span>
-                        </div>
+                        <div class="quantity-wrapper">
+                            <span class="item-cat">Quantity:</span>
 
+                            <div class="qty-btn-group">
+                                <a th:href="@{'/cart/update/' + ${item.id} + '/decrease'}" class="btn-qty">
+                                    <i class="fa-solid fa-minus"></i>
+                                </a>
+
+                                <input type="text" th:value="${item.quantity}" readonly class="qty-input">
+
+                                <a th:href="@{'/cart/update/' + ${item.id} + '/increase'}" class="btn-qty">
+                                    <i class="fa-solid fa-plus"></i>
+                                </a>
+                            </div>
+                        </div>
                         <div class="item-actions" style="display: flex; gap: 15px; margin-top: 10px;">
                             <form th:action="@{/favorites/toggle}" method="post">
                                 <input type="hidden" name="productId" th:value="${item.product.id}" />

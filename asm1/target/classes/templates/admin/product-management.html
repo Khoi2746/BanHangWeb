@@ -413,7 +413,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Price ($)</label>
+                        <label>Price (₫)</label>
                         <input type="number" th:field="*{price}" placeholder="Ex: 150" required min="0">
                     </div>
 
@@ -481,7 +481,7 @@
                             <td th:text="${p.gender}">Men</td>
 
                             <td style="font-weight: 600;"
-                                th:text="'$' + ${#numbers.formatDecimal(p.price, 0, 'COMMA', 0, 'POINT')}">
+                                th:text=" ${#numbers.formatDecimal(p.price, 0, 'COMMA', 0, 'POINT')} + '₫'">
                                 $120
                             </td>
 
