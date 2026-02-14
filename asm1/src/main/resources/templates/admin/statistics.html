@@ -311,11 +311,12 @@
             <div class="stat-card">
                 <div class="stat-header">
                     <span class="stat-title">Total Revenue</span>
-                    <i class="fa-solid fa-dollar-sign stat-icon bg-blue"></i>
+                    <span class="stat-icon bg-blue vnd-icon">₫</span>
                 </div>
-                <div class="stat-value">$124,500</div>
+                <div class="stat-value" th:text="${#numbers.formatDecimal(totalRevenue, 0, 'POINT', 0, 'COMMA')} + '₫'">
+                    0₫</div>
                 <div class="stat-trend trend-up">
-                    <i class="fa-solid fa-arrow-trend-up"></i> +12.5% <span>vs last month</span>
+                    <i class="fa-solid fa-arrow-trend-up"></i> <span>Live Data</span>
                 </div>
             </div>
 
@@ -324,9 +325,9 @@
                     <span class="stat-title">Total Orders</span>
                     <i class="fa-solid fa-cart-shopping stat-icon bg-green"></i>
                 </div>
-                <div class="stat-value">1,340</div>
+                <div class="stat-value" th:text="${totalOrders}">0</div>
                 <div class="stat-trend trend-up">
-                    <i class="fa-solid fa-arrow-trend-up"></i> +5.2% <span>vs last month</span>
+                    <i class="fa-solid fa-arrow-trend-up"></i> <span>System Total</span>
                 </div>
             </div>
 
@@ -335,20 +336,20 @@
                     <span class="stat-title">Products Sold</span>
                     <i class="fa-solid fa-shoe-prints stat-icon bg-orange"></i>
                 </div>
-                <div class="stat-value">3,500</div>
-                <div class="stat-trend trend-down">
-                    <i class="fa-solid fa-arrow-trend-down"></i> -2.1% <span>vs last month</span>
+                <div class="stat-value" th:text="${totalProductsSold != null ? totalProductsSold : 0}">0</div>
+                <div class="stat-trend">
+                    <i class="fa-solid fa-check"></i> <span>Units delivered</span>
                 </div>
             </div>
 
             <div class="stat-card">
                 <div class="stat-header">
-                    <span class="stat-title">New Customers</span>
+                    <span class="stat-title">System Users</span>
                     <i class="fa-solid fa-user-group stat-icon bg-purple"></i>
                 </div>
-                <div class="stat-value">254</div>
+                <div class="stat-value" th:text="${totalUsers}">0</div>
                 <div class="stat-trend trend-up">
-                    <i class="fa-solid fa-arrow-trend-up"></i> +8.4% <span>vs last month</span>
+                    <i class="fa-solid fa-arrow-trend-up"></i> <span>Registered Members</span>
                 </div>
             </div>
         </div>
@@ -366,54 +367,51 @@
         </div>
     </main>
 
-    <script>
-        // --- 1. Biểu đồ Doanh thu (Line Chart) ---
+    <script th:inline="javascript">
+        // Nhận dữ liệu từ Controller gửi sang
+        const months = JSON.parse(/*[[${monthsJson}]]*/ '[]');
+        const amounts = JSON.parse(/*[[${amountsJson}]]*/ '[]');
+        const catNames = JSON.parse(/*[[${catNamesJson}]]*/ '[]');
+        const catCounts = JSON.parse(/*[[${catCountsJson}]]*/ '[]');
+
+        // --- 1. Biểu đồ Doanh thu (Real Data) ---
         const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
         new Chart(ctxRevenue, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'], // Trục hoành: Tháng
+                labels: months,
                 datasets: [{
-                    label: 'Revenue ($)',
-                    data: [12000, 19000, 15000, 25000, 22000, 30000, 35000], // Dữ liệu giả lập
-                    borderColor: '#111', // Đường màu đen
-                    backgroundColor: 'rgba(0, 0, 0, 0.1)', // Nền xám nhạt dưới đường
-                    tension: 0.4, // Độ cong của đường
+                    label: 'Doanh thu (₫)',
+                    data: amounts,
+                    borderColor: '#111',
+                    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                    tension: 0.4,
                     fill: true
                 }]
             },
             options: {
                 responsive: true,
-                plugins: { legend: { display: false } }, // Ẩn chú thích cho gọn
-                scales: {
-                    y: { beginAtZero: true, grid: { borderDash: [5, 5] } }, // Đường lưới nét đứt
-                    x: { grid: { display: false } }
-                }
+                plugins: { legend: { display: false } }
             }
         });
 
-        // --- 2. Biểu đồ Danh mục (Doughnut Chart) ---
+        // --- 2. Biểu đồ Danh mục (Real Data) ---
         const ctxCategory = document.getElementById('categoryChart').getContext('2d');
         new Chart(ctxCategory, {
             type: 'doughnut',
             data: {
-                labels: ['Men Shoes', 'Women Shoes', 'Kids', 'Clothing'],
+                labels: catNames,
                 datasets: [{
-                    data: [45, 30, 15, 10], // Tỉ lệ phần trăm giả lập
-                    backgroundColor: [
-                        '#111',       // Đen
-                        '#757575',    // Xám đậm
-                        '#e0e0e0',    // Xám nhạt
-                        '#ff5252'     // Đỏ điểm nhấn
-                    ],
+                    data: catCounts,
+                    backgroundColor: ['#111', '#757575', '#e0e0e0', '#fa5400', '#007bff'],
                     borderWidth: 0
                 }]
             },
             options: {
                 responsive: true,
-                cutout: '70%', // Độ rỗng ở giữa (tạo thành hình bánh donut)
+                cutout: '70%',
                 plugins: {
-                    legend: { position: 'bottom', labels: { usePointStyle: true } }
+                    legend: { position: 'bottom' }
                 }
             }
         });
