@@ -18,7 +18,7 @@
                 </div>
                 <div class="top-right-links">
                     <th:block th:if="${session.loggedInUser != null and session.loggedInUser.roleId == 1}">
-                            <a href="http://localhost:8080/admin/dashboard" style="font-weight: bold;">ADMIN DASHBOARD</a>
+                        <a href="http://localhost:8080/admin/dashboard" style="font-weight: bold;">ADMIN DASHBOARD</a>
                     </th:block>|
                     <a href="#">Find a Store</a>
                     <span>|</span>
@@ -79,10 +79,18 @@
                         <i class="fa-solid fa-magnifying-glass search-icon-btn"></i>
                         <input type="text" placeholder="Search">
                     </div>
-                    <a href="http://localhost:8080/favorites" class="action-icon"><i
-                            class="fa-regular fa-heart"></i></a>
-                    <a href="http://localhost:8080/cart" class="action-icon"><i
-                            class="fa-solid fa-bag-shopping"></i></a>
+
+                    <a href="http://localhost:8080/favorites" class="action-icon">
+                        <i class="fa-regular fa-heart"></i>
+                    </a>
+
+                    <a th:href="@{/customer/orders}" class="action-icon" title="Đơn hàng của tôi">
+                        <i class="fa-solid fa-box"></i>
+                    </a>
+
+                    <a href="http://localhost:8080/cart" class="action-icon">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </a>
                 </div>
             </div>
         </nav>

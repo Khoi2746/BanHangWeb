@@ -1,6 +1,8 @@
 package com.example.asm1.repository;
 
 import com.example.asm1.Entity.Order;
+import com.example.asm1.Entity.User;
+
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +31,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
            "JOIN od.product p " +
            "GROUP BY p.category")
     List<Object[]> getSalesByCategory();
+
+    List<Order> findByUserOrderByOrderDateDesc(User user);
 }
