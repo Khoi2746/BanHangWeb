@@ -6,47 +6,134 @@
     <title>Nike - Sign In</title>
     <link rel="icon" type="image/png" th:href="@{/image/icon.png}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        /* --- CSS CŨ GIỮ NGUYÊN --- */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Helvetica Neue", Arial, sans-serif; }
-        body { background-color: #fff; display: flex; justify-content: center; padding-top: 60px; }
+        body { background-color: #fff; display: flex; justify-content: center; padding-top: 60px; padding-bottom: 60px; }
         .login-container { width: 100%; max-width: 400px; padding: 20px; text-align: center; }
         .logo-box { margin-bottom: 30px; }
-        .logo-box img { height: 30px; }
+        .logo-box img { height: 30px; } /* Nếu không có ảnh thì nó ẩn đi */
         h1 { font-size: 24px; font-weight: 700; margin-bottom: 25px; text-align: left; }
         .form-group { margin-bottom: 15px; text-align: left; }
         input { width: 100%; padding: 15px; border: 1px solid #e5e5e5; border-radius: 8px; font-size: 16px; outline: none; }
         input:focus { border-color: #111; }
-        .btn-login { width: 100%; background-color: #111; color: #fff; padding: 16px; border: none; border-radius: 30px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 20px; }
+        .btn-login { width: 100%; background-color: #111; color: #fff; padding: 16px; border: none; border-radius: 30px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 10px; }
         .btn-login:hover { background-color: #333; }
         .error-msg { color: #d43f3a; font-size: 14px; margin-bottom: 15px; text-align: left; }
         .footer-links { margin-top: 25px; font-size: 14px; color: #757575; }
         .footer-links a { color: #111; text-decoration: underline; font-weight: 600; }
+
+        /* --- CSS MỚI THÊM CHO MẠNG XÃ HỘI --- */
+        
+        /* Dòng kẻ ngang có chữ OR ở giữa */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 25px 0;
+            color: #ccc;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        .divider span {
+            padding: 0 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #757575;
+        }
+
+        /* Container chứa 2 nút */
+        .social-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Style chung cho nút Social */
+        .btn-social {
+            width: 100%;
+            padding: 14px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        /* Nút Google (Trắng viền xám - Style sạch sẽ) */
+        .btn-google {
+            background-color: #fff;
+            color: #111;
+            border-color: #ccc;
+        }
+        .btn-google:hover {
+            background-color: #f5f5f5;
+            border-color: #999;
+        }
+
+        /* Nút Facebook (Xanh đặc trưng) */
+        .btn-facebook {
+            background-color: #1877f2;
+            color: #fff;
+            border-color: #1877f2;
+        }
+        .btn-facebook:hover {
+            background-color: #1565c0;
+        }
+        
+        .btn-social i {
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="logo-box">
-            <img src="/image/icon.png" alt="Nike Logo">
+             <svg class="pre-logo-svg" height="60px" width="60px" fill="#111" viewBox="0 0 69 32"><path d="M68.56 4L18.4 25.36Q12.16 28 7.92 28q-4.8 0-6.96-3.36-1.36-2.16-.8-5.48t2.96-7.08q2-3.04 6.56-8-1.6 2.56-2.24 5.28-1.2 5.12 2.16 7.52Q11.2 18.16 17.76 16l50.8-12z"></path></svg>
         </div>
-        <h1>Enter your email and password to sign in.</h1>
+        
+        <h1>Enter your email to join us or sign in.</h1>
 
         <div th:if="${error}" class="error-msg" th:text="${error}"></div>
         <div th:if="${success}" class="error-msg" style="color: green;" th:text="${success}"></div>
 
         <form th:action="@{/login}" method="POST">
             <div class="form-group">
-                <input type="email" name="email" placeholder="Email Address*" required>
+                <input type="email" name="email" placeholder="Email Address" required>
             </div>
             <div class="form-group">
-                <input type="password" name="password" placeholder="Password*" required>
+                <input type="password" name="password" placeholder="Password" required>
             </div>
             
             <p class="footer-links" style="text-align: left; margin-bottom: 20px;">
                 By logging in, you agree to Nike's <a href="#">Privacy Policy</a> and <a href="#">Terms of Use</a>.
             </p>
 
-            <button type="submit" class="btn-login">Sign In</button>
+            <button type="submit" class="btn-login">SIGN IN</button>
         </form>
+
+        <div class="divider">
+            <span>OR CONTINUE WITH</span>
+        </div>
+
+        <div class="social-buttons">
+            <a href="/oauth2/authorization/google" class="btn-social btn-google">
+                <i class="fa-brands fa-google" style="color: #DB4437;"></i> Continue with Google
+            </a>
+
+            <a href="/oauth2/authorization/facebook" class="btn-social btn-facebook">
+                <i class="fa-brands fa-facebook-f"></i> Continue with Facebook
+            </a>
+        </div>
 
         <p class="footer-links">
             Not a Member? <a th:href="@{/checkMail}">Join Us.</a>

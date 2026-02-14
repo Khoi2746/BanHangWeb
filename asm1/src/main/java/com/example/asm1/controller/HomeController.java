@@ -24,6 +24,6 @@ public class HomeController {
         // Gửi danh sách này sang Thymeleaf với tên là "products"
         model.addAttribute("products", productList);
         
-        return "index"; // Tên file html của ku em
+        return "index"; // Tên file html 
     }
 }
