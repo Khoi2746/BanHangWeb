@@ -31,7 +31,7 @@
             list-style: none;
         }
 
-        /* ================= SIDEBAR (GIỮ NGUYÊN) ================= */
+        /* ================= SIDEBAR ================= */
         .sidebar {
             width: 260px;
             background-color: #111;
@@ -71,7 +71,6 @@
             margin-bottom: 15px;
         }
 
-        /* Trạng thái mặc định cho tất cả các ô: Tối và chữ xám */
         .menu-items a {
             display: flex;
             align-items: center;
@@ -81,34 +80,18 @@
             font-size: 15px;
             font-weight: 500;
             color: #aaa;
-            /* Chữ xám tối */
             background-color: transparent;
-            /* Nền trong suốt (tối theo sidebar) */
             transition: all 0.3s ease;
             text-decoration: none;
         }
 
-        /* Hiệu ứng HOVER: Khi đưa chuột vào bất kỳ ô nào thì nó mới sáng lên */
         .menu-items a:hover {
             background-color: #333;
-            /* Nền xám nhạt hiện lên */
             color: #fff;
-            /* Chữ trắng tinh */
         }
 
-        /* Icon cũng sẽ trắng theo khi hover */
         .menu-items a:hover i {
             color: #fff;
-        }
-
-        .logout-btn {
-            color: #d43f3a;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: auto;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .sidebar-bottom {
@@ -116,6 +99,8 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
         }
 
         .bottom-link {
@@ -149,16 +134,14 @@
             font-weight: 600;
         }
 
-        /* LAYOUT 2 CỘT */
         .content-grid {
             display: grid;
             grid-template-columns: 350px 1fr;
-            /* Form 350px, Table phần còn lại */
             gap: 30px;
             align-items: start;
         }
 
-        /* --- 1. FORM CARD (Sticky) --- */
+        /* --- FORM CARD --- */
         .form-card {
             background: white;
             padding: 25px;
@@ -189,8 +172,7 @@
         }
 
         .form-group input,
-        .form-group select,
-        .form-group textarea {
+        .form-group select {
             width: 100%;
             padding: 10px 12px;
             border: 1px solid #ddd;
@@ -198,11 +180,6 @@
             font-size: 14px;
             outline: none;
             transition: border 0.3s;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
         }
 
         .form-group input:focus,
@@ -236,17 +213,20 @@
             text-decoration: underline;
         }
 
-        /* --- 2. TABLE CARD --- */
+        /* --- TABLE CARD (ĐÃ FIX CSS) --- */
         .table-card {
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
+            overflow-x: auto;
+            padding-bottom: 5px;
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
+            /* BẮT BUỘC: Nối liền các dòng kẻ */
+            border-collapse: collapse !important; 
+            min-width: 900px;
         }
 
         thead {
@@ -261,14 +241,20 @@
             font-weight: 700;
             color: #555;
             text-transform: uppercase;
+            white-space: nowrap;
         }
 
         td {
-            padding: 15px 20px;
+            padding: 12px 20px;
             border-bottom: 1px solid #eee;
-            font-size: 14px;
-            color: #111;
-            vertical-align: middle;
+            /* BẮT BUỘC: Căn giữa dọc */
+            /* vertical-align: middle !important;  */
+            height: 83px; /* Tăng chiều cao lên xíu cho thoáng */
+        }
+
+        td p, td span, td div {
+            margin: 0;
+            line-height: normal;
         }
 
         tr:last-child td {
@@ -279,19 +265,15 @@
             background-color: #fafafa;
         }
 
-        /* Product Image Thumbnail */
         .product-thumb {
             width: 50px;
             height: 50px;
             object-fit: contain;
-            /* Giữ tỉ lệ ảnh, không bị méo */
             background-color: #f5f5f5;
             border-radius: 4px;
             mix-blend-mode: multiply;
-            /* Hòa trộn nền nếu ảnh có nền trắng */
         }
 
-        /* Badge Category */
         .badge-cat {
             background: #eee;
             padding: 4px 8px;
@@ -301,21 +283,46 @@
             color: #333;
         }
 
-        /* Actions */
+        /* --- FIX CỘT ACTIONS (Thẳng tắp, không lệch) --- */
+        td:last-child, th:last-child {
+            width: 140px;
+            text-align: center;
+            padding-right: 10px;
+        }
+
         .action-btns {
             display: flex;
+            justify-content: center;
+            align-items: center;
             gap: 10px;
+            
+            /* QUAN TRỌNG: Không set height 100% để td tự căn giữa */
+            margin: 0;
+        }
+
+        .action-btns form {
+            display: flex;
+            margin: 0;
+            padding: 0;
         }
 
         .btn-icon {
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             border: none;
+            outline: none;
+            
             display: flex;
             align-items: center;
             justify-content: center;
+            
             cursor: pointer;
+            text-decoration: none;
+            
+            padding: 0;
+            margin: 0;
+            line-height: 34px; /* Mẹo: line-height bằng height để icon chính giữa */
             transition: transform 0.2s;
         }
 
@@ -324,45 +331,19 @@
         }
 
         .btn-edit {
-            background-color: #f5f5f5;
-            color: #111;
+            background-color: #f0f0f0;
+            color: #333;
         }
 
         .btn-delete {
-            background-color: #fff0f0;
+            background-color: #ffe5e5;
             color: #d43f3a;
         }
-
-        /* Gom nhóm đẩy xuống đáy */
-        .sidebar-bottom {
-            margin-top: auto;
-            /* Đẩy cụm này xuống sát đáy */
-            display: flex;
-            flex-direction: column;
-            /* Xếp dọc */
-            gap: 15px;
-            /* Khoảng cách giữa nút Home và Logout */
-        }
-
-        /* Style cho nút Return Home */
-        .bottom-link {
-            color: #aaa;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: color 0.3s;
+        
+        .btn-icon i {
             font-size: 14px;
-        }
-
-        .bottom-link:hover {
-            color: #fff;
-        }
-
-        /* Chỉnh lại nút Logout cho khớp */
-        .logout-btn {
-            /* Đảm bảo nó không bị margin thừa */
-            margin-top: 0 !important;
+            display: inline-block;
+            line-height: 1;
         }
     </style>
 </head>
@@ -377,8 +358,8 @@
             </div>
 
             <ul class="menu-items">
-                <li><a th:href="@{/admin/dashboard}" class="active"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
-                <li><a th:href="@{/admin/products}"><i class="fa-solid fa-box-open"></i> Products</a></li>
+                <li><a th:href="@{/admin/dashboard}"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li><a th:href="@{/admin/products}" class="active"><i class="fa-solid fa-box-open"></i> Products</a></li>
                 <li><a th:href="@{/admin/user/management}"><i class="fa-solid fa-users"></i> Users</a></li>
                 <li><a th:href="@{/admin/statistics}"><i class="fa-solid fa-chart-line"></i> Statistics</a></li>
                 <li><a th:href="@{/admin/orders}"><i class="fa-solid fa-file-invoice-dollar"></i> Orders</a></li>
@@ -438,7 +419,6 @@
                     <div class="form-group">
                         <label>Product Image</label>
                         <input type="file" name="imageFile" accept="image/*">
-
                         <input type="hidden" th:field="*{imageUrl}">
                     </div>
 
@@ -448,11 +428,9 @@
 
                     <a th:if="${product.id != null}" th:href="@{/admin/products}" class="btn-cancel">Cancel Edit</a>
                 </form>
-                <form th:action="@{/admin/products/save}" method="post" th:object="${product}"
-                    enctype="multipart/form-data">
-                    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-
-                    <input type="hidden" th:field="*{id}">
+                
+                <form th:action="@{/admin/products/save}" method="post">
+                     <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 </form>
             </div>
 
