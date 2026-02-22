@@ -33,7 +33,6 @@ public class CustomerOrderController {
         
         model.addAttribute("orders", myOrders);
         
-        // [QUAN TRỌNG] Phải thêm "user/" vào trước tên file
         return "user/order-history"; 
     }
 
@@ -53,8 +52,6 @@ public class CustomerOrderController {
         }
 
         model.addAttribute("order", order);
-        
-        // [QUAN TRỌNG] Phải thêm "user/" vào trước tên file
         return "user/order-tracking"; 
     }
 }
