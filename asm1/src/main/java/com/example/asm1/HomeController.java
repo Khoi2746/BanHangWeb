@@ -1,4 +1,5 @@
-package com.example.asm1.controller;
+package com.example.asm1;
+
 
 import java.util.List;
 

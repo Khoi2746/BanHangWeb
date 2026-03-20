@@ -163,7 +163,7 @@ public class ShoppingController {
 
         List<Favorite> favorites = favoriteRepository.findByUser(user);
         model.addAttribute("favorites", favorites);
-        return "favorite"; 
+        return "favorite";
     }
 
     @PostMapping("/favorites/toggle")
